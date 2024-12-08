@@ -18,6 +18,8 @@ class PinCodeTextField extends StatefulWidget {
   final bool enabled;
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final bool showContextMenu;
+  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
 
   const PinCodeTextField({
     Key? key,
@@ -37,6 +39,8 @@ class PinCodeTextField extends StatefulWidget {
     this.enabled = true,
     this.keyboardType = TextInputType.number,
     this.inputFormatters,
+    this.showContextMenu = true,
+    this.contextMenuBuilder,
   }) : super(key: key);
 
   @override
@@ -47,6 +51,7 @@ class _PinCodeTextFieldState extends State<PinCodeTextField> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
   late List<String> _pin;
+  final GlobalKey _editableTextKey = GlobalKey();
 
   @override
   void initState() {
@@ -55,20 +60,22 @@ class _PinCodeTextFieldState extends State<PinCodeTextField> {
     _focusNode = widget.focusNode ?? FocusNode();
     _pin = List.filled(widget.length, '');
     
-    _controller.addListener(() {
-      setState(() {
-        final text = _controller.text;
-        _pin = List.filled(widget.length, '');
-        for (int i = 0; i < text.length && i < widget.length; i++) {
-          _pin[i] = text[i];
-        }
-      });
+    _controller.addListener(_updatePinState);
+  }
 
-      if (_controller.text.length == widget.length) {
-        widget.onCompleted?.call(_controller.text);
+  void _updatePinState() {
+    setState(() {
+      final text = _controller.text;
+      _pin = List.filled(widget.length, '');
+      for (int i = 0; i < text.length && i < widget.length; i++) {
+        _pin[i] = text[i];
       }
-      widget.onChanged?.call(_controller.text);
     });
+
+    if (_controller.text.length == widget.length) {
+      widget.onCompleted?.call(_controller.text);
+    }
+    widget.onChanged?.call(_controller.text);
   }
 
   @override
@@ -82,40 +89,53 @@ class _PinCodeTextFieldState extends State<PinCodeTextField> {
     super.dispose();
   }
 
+  // Default context menu builder when no custom builder is provided
+  Widget _defaultContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
+    return AdaptiveTextSelectionToolbar.editableText(
+      editableTextState: editableTextState,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        AbsorbPointer(
-          absorbing: true,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return GestureDetector(
+      onTap: () {
+        _focusNode.requestFocus();
+      },
+      child: Stack(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               widget.length,
               (index) => _buildPinBox(index),
             ),
           ),
-        ),
-        Opacity(
-          opacity: 0,
-          child: TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            keyboardType: widget.keyboardType,
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(widget.length),
-              ...?widget.inputFormatters,
-            ],
-            autofocus: widget.autofocus,
-            enabled: widget.enabled,
-            showCursor: false,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.zero,
+          Positioned.fill(
+            child: EditableText(
+              key: _editableTextKey,
+              controller: _controller,
+              focusNode: _focusNode,
+              style: const TextStyle(color: Colors.transparent, fontSize: 0),
+              cursorColor: Colors.transparent,
+              backgroundCursorColor: Colors.transparent,
+              keyboardType: widget.keyboardType,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(widget.length),
+                ...?widget.inputFormatters,
+              ],
+              autofocus: widget.autofocus,
+              readOnly: false,
+              contextMenuBuilder: widget.showContextMenu
+                  ? (widget.contextMenuBuilder ?? _defaultContextMenuBuilder)
+                  : null,
+              onChanged: (value) {
+                // This is handled by the controller listener
+              },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -126,6 +146,7 @@ class _PinCodeTextFieldState extends State<PinCodeTextField> {
     return Container(
       width: 50,
       height: 50,
+      margin: const EdgeInsets.symmetric(horizontal: 4),
       alignment: Alignment.center,
       decoration: widget.pinBoxDecoration ??
           BoxDecoration(

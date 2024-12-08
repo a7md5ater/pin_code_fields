@@ -31,6 +31,7 @@ class PinCodeDemoPage extends StatefulWidget {
 class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
   String _pinCode = '';
   bool _obscureText = false;
+  bool _showContextMenu = true;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +54,7 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
             const SizedBox(height: 10),
             PinCodeTextField(
               length: 6,
+              showContextMenu: _showContextMenu,
               onChanged: (value) {
                 setState(() {
                   _pinCode = value;
@@ -76,6 +78,15 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
             PinCodeTextField(
               length: 4,
               obscureText: _obscureText,
+              showContextMenu: _showContextMenu,
+              // Optional: Custom context menu builder
+              contextMenuBuilder: _showContextMenu 
+                ? (context, editableTextState) {
+                    return AdaptiveTextSelectionToolbar.editableText(
+                      editableTextState: editableTextState,
+                    );
+                  } 
+                : null,
               pinBoxDecoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.blue,
@@ -93,10 +104,20 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
             ),
             const SizedBox(height: 20),
 
-            // Obscure Text Toggle
+            // Context Menu and Obscure Text Toggles
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Text('Show Context Menu'),
+                Switch(
+                  value: _showContextMenu,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _showContextMenu = value;
+                    });
+                  },
+                ),
+                const SizedBox(width: 20),
                 const Text('Obscure Text'),
                 Switch(
                   value: _obscureText,
