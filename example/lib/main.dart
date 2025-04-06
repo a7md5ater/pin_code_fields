@@ -53,11 +53,7 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
             ),
             const SizedBox(height: 10),
             PinCodeTextField(
-              config: PinCodeConfig(
-                length: 6,
-                showContextMenu: _showContextMenu,
-                enabled: true,
-              ),
+              length: 6,
               onChanged: (value) {
                 setState(() {
                   _pinCode = value;
@@ -68,37 +64,9 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
                   SnackBar(content: Text('PIN Completed: $value')),
                 );
               },
-              pinBoxDecoration: PinBoxDecoration.outlinedDecoration(
-                borderColor: Colors.blue,
-                borderWidth: 2,
-              ),
             ),
             const SizedBox(height: 20),
 
-            // Customized PIN Code Text Field
-            Text(
-              'Customized PIN Code (4 digits)',
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            PinCodeTextField(
-              config: PinCodeConfig(
-                length: 4,
-                obscureText: _obscureText,
-                showContextMenu: _showContextMenu,
-              ),
-              textStyle: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              cursorColor: Colors.green,
-              cursorWidth: 3,
-              cursorHeight: 30,
-              pinBoxDecoration: PinBoxDecoration.filledDecoration(
-                fillColor: Colors.grey.shade200,
-              ),
-            ),
             const SizedBox(height: 20),
 
             // Context Menu and Obscure Text Toggles
