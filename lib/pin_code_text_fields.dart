@@ -103,13 +103,10 @@ class PinCodeTextField extends StatefulWidget {
   final TextEditingController? controller; // Kept
 
   /// Enabled Color fill for individual pin fields, default is [false]
-  final bool enableActiveFill; // Kept (used by PinTheme logic)
+  final bool enableActiveFill;
 
   /// Auto dismiss the keyboard upon inputting the value for the last field. Default is [true]
-  final bool autoDismissKeyboard; // Kept
-
-  /// Auto dispose the [controller] and [FocusNode] upon the destruction of widget from the widget tree. Default is [true]
-  final bool autoDisposeControllers; // Kept
+  final bool autoDismissKeyboard;
 
   /// Configures how the platform keyboard will select an uppercase or lowercase keyboard.
   final TextCapitalization textCapitalization; // Kept
@@ -120,18 +117,8 @@ class PinCodeTextField extends StatefulWidget {
   /// Triggers the error animation
   final StreamController<ErrorAnimationType>? errorAnimationController; // Kept
 
-  /// Callback method to validate if text can be pasted. Default will be pasted as received.
-  final bool Function(String? text)?
-      beforeTextPaste; // Kept (Needs integration with custom context menu)
-
   /// Method for detecting a pin_code form tap
   final GestureTapCallback? onTap; // Kept (Will be handled by gesture detector)
-
-  /// Whether to show a confirmation dialog before pasting or not - **REMOVED**
-  // final bool showPasteConfirmationDialog; // Removed
-
-  /// Configuration for paste dialog. - **REMOVED**
-  // final DialogConfig? dialogConfig; // Removed
 
   /// Theme for the pin cells. Read more [PinTheme]
   final PinTheme pinTheme; // Kept
@@ -241,13 +228,11 @@ class PinCodeTextField extends StatefulWidget {
     this.textStyle,
     this.useHapticFeedback = false,
     this.hapticFeedbackTypes = HapticFeedbackTypes.light,
-    this.enableActiveFill = false,
+    this.enableActiveFill = true,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction = TextInputAction.done,
     this.autoDismissKeyboard = true,
-    this.autoDisposeControllers = true,
     this.errorAnimationController,
-    this.beforeTextPaste,
     this.pinTheme = const PinTheme.defaults(),
     this.keyboardAppearance,
     this.enablePinAutofill = true, // Needs re-implementation
@@ -333,9 +318,7 @@ class PinCodeFormField extends FormField<String> {
     TextCapitalization textCapitalization = TextCapitalization.none,
     TextInputAction textInputAction = TextInputAction.done,
     bool autoDismissKeyboard = true,
-    bool autoDisposeControllers = true,
     StreamController<ErrorAnimationType>? errorAnimationController,
-    bool Function(String? text)? beforeTextPaste,
     PinTheme pinTheme = const PinTheme.defaults(),
     Brightness? keyboardAppearance,
     bool enablePinAutofill = true,
@@ -407,9 +390,7 @@ class PinCodeFormField extends FormField<String> {
                   textCapitalization: textCapitalization,
                   textInputAction: textInputAction,
                   autoDismissKeyboard: autoDismissKeyboard,
-                  autoDisposeControllers: autoDisposeControllers,
                   errorAnimationController: errorAnimationController,
-                  beforeTextPaste: beforeTextPaste,
                   pinTheme: pinTheme,
                   keyboardAppearance: keyboardAppearance,
                   enablePinAutofill: enablePinAutofill,

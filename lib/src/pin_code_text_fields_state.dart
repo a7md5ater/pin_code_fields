@@ -268,10 +268,11 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
     _blinkDebounce?.cancel();
     _textEditingController?.removeListener(_textEditingControllerListener);
 
-    if (widget.autoDisposeControllers) {
+    if (widget.controller == null) {
       _textEditingController?.dispose();
+    }
+    if (widget.focusNode == null) {
       _focusNode.dispose();
-    } else {
       // Only remove listener if not disposing focus node provided externally
       _focusNode.removeListener(_onFocusChanged);
     }
