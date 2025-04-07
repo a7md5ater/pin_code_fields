@@ -311,7 +311,6 @@ class ReadOnlyExample extends StatelessWidget {
           cursorColor: Theme.of(context).colorScheme.outline,
           animateCursor: false,
           cursorBlinkDuration: const Duration(milliseconds: 800),
-          cursorBlinkCurve: Curves.easeInOut,
         ),
       ],
     );
@@ -397,6 +396,7 @@ class GradientExample extends StatelessWidget {
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
+          enableActiveFill: true,
           showCursor: true,
           cursorColor: Colors.purple,
           animateCursor: true,
@@ -596,7 +596,6 @@ class _FormValidationExampleState extends State<FormValidationExample> {
                 ),
                 boxShadows: _defaultBoxShadow(context),
                 animationDuration: const Duration(milliseconds: 300),
-                enableActiveFill: true,
                 keyboardType: TextInputType.number,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
@@ -1085,6 +1084,220 @@ class _CustomAnimationExampleState extends State<CustomAnimationExample> {
   }
 }
 
+class ActiveFieldExample extends StatelessWidget {
+  final PinConfig config;
+
+  const ActiveFieldExample({super.key, required this.config});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          "Active Field Styling Example",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          "This example showcases enhanced active field styling",
+          style: TextStyle(
+            color: colorScheme.onSurface.withOpacity(0.7),
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 24),
+        Card(
+          elevation: 4,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  "Standard Active Field",
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                PinCodeTextField(
+                  length: 6,
+                  obscureText: config['obscureText'] ?? false,
+                  readOnly: config['readOnly'] ?? false,
+                  enableContextMenu: config['enableContextMenu'] ?? true,
+                  onChanged: config['onChanged'] ?? (value) {},
+                  onCompleted: config['onCompleted'] ?? (value) {},
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(8),
+                    fieldHeight: 50,
+                    fieldWidth: 40,
+                    fieldOuterPadding:
+                        const EdgeInsets.symmetric(horizontal: 4),
+                    // Standard styling
+                    activeColor: colorScheme.primary,
+                    inactiveColor: colorScheme.outline,
+                    selectedColor: colorScheme.secondary,
+                    activeFillColor:
+                        colorScheme.primaryContainer.withOpacity(0.3),
+                    inactiveFillColor: Colors.transparent,
+                    selectedFillColor:
+                        colorScheme.secondaryContainer.withOpacity(0.3),
+                    borderWidth: 1.5,
+                  ),
+                  enableActiveFill: true,
+                  animationType: AnimationType.scale,
+                  animationDuration: const Duration(milliseconds: 300),
+                  keyboardType: TextInputType.number,
+                  showCursor: true,
+                  cursorColor: colorScheme.primary,
+                  animateCursor: true,
+                  cursorBlinkDuration: const Duration(milliseconds: 800),
+                  cursorBlinkCurve: Curves.easeInOut,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Card(
+          elevation: 4,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  "Enhanced Active Field",
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                PinCodeTextField(
+                  length: 6,
+                  obscureText: config['obscureText'] ?? false,
+                  readOnly: config['readOnly'] ?? false,
+                  enableContextMenu: config['enableContextMenu'] ?? true,
+                  onChanged: config['onChanged'] ?? (value) {},
+                  onCompleted: config['onCompleted'] ?? (value) {},
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(12),
+                    fieldHeight: 55,
+                    fieldWidth: 45,
+                    fieldOuterPadding:
+                        const EdgeInsets.symmetric(horizontal: 4),
+                    // Enhanced active field styling
+                    activeColor: colorScheme.primary,
+                    inactiveColor: colorScheme.outline.withOpacity(0.5),
+                    selectedColor: colorScheme.secondary,
+                    // Thicker border for active field
+                    activeBorderWidth: 3.0,
+                    selectedBorderWidth: 1.5,
+                    inactiveBorderWidth: 1.5,
+                    // Vibrant fill color for active field
+                    activeFillColor: colorScheme.primaryContainer,
+                    inactiveFillColor: Colors.transparent,
+                    selectedFillColor:
+                        colorScheme.secondaryContainer.withOpacity(0.3),
+                    // Box shadow for active field
+                    activeBoxShadows: [
+                      BoxShadow(
+                        color: colorScheme.primary.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  enableActiveFill: true,
+                  animationType: AnimationType.fade,
+                  animationDuration: const Duration(milliseconds: 300),
+                  keyboardType: TextInputType.number,
+                  showCursor: true,
+                  cursorColor: colorScheme.onPrimaryContainer,
+                  animateCursor: true,
+                  cursorBlinkDuration: const Duration(milliseconds: 800),
+                  cursorBlinkCurve: Curves.easeInOut,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Card(
+          elevation: 4,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  "Glow Effect Active Field",
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                PinCodeTextField(
+                  length: 6,
+                  obscureText: config['obscureText'] ?? false,
+                  readOnly: config['readOnly'] ?? false,
+                  enableContextMenu: config['enableContextMenu'] ?? true,
+                  onChanged: config['onChanged'] ?? (value) {},
+                  onCompleted: config['onCompleted'] ?? (value) {},
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.circle,
+                    borderRadius: BorderRadius.circular(30),
+                    fieldHeight: 50,
+                    fieldWidth: 50,
+                    fieldOuterPadding:
+                        const EdgeInsets.symmetric(horizontal: 4),
+                    // Glow effect for active field
+                    activeColor: Colors
+                        .transparent, // Transparent border for glow effect
+                    inactiveColor: colorScheme.outline.withOpacity(0.3),
+                    selectedColor: colorScheme.secondary.withOpacity(0.5),
+                    // Fill colors
+                    activeFillColor: colorScheme.primaryContainer,
+                    inactiveFillColor: colorScheme.surface,
+                    selectedFillColor: colorScheme.secondaryContainer,
+                    // Dramatic box shadow for active field
+                    activeBoxShadows: [
+                      BoxShadow(
+                        color: colorScheme.primary.withOpacity(0.6),
+                        spreadRadius: 2,
+                        blurRadius: 12,
+                        offset: const Offset(0, 0),
+                      ),
+                    ],
+                  ),
+                  enableActiveFill: true,
+                  animationType: AnimationType.scale,
+                  animationDuration: const Duration(milliseconds: 300),
+                  keyboardType: TextInputType.number,
+                  showCursor: true,
+                  cursorColor: colorScheme.onPrimaryContainer,
+                  animateCursor: true,
+                  cursorBlinkDuration: const Duration(milliseconds: 800),
+                  cursorBlinkCurve: Curves.easeInOut,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class PinCodeTextFieldsExampleApp extends StatelessWidget {
   const PinCodeTextFieldsExampleApp({super.key});
 
@@ -1286,6 +1499,11 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
               label: const Text('Custom Animation'),
               icon: const Icon(Icons.animation),
             ),
+            ButtonSegment<ExampleType>(
+              value: ExampleType.activeField,
+              label: const Text('Active Field'),
+              icon: const Icon(Icons.format_paint),
+            ),
           ],
           selected: <ExampleType>{_selectedExample},
           onSelectionChanged: (Set<ExampleType> newSelection) {
@@ -1409,6 +1627,8 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
         return CustomPlaceholderExample(config: sharedConfig);
       case ExampleType.customAnimation:
         return CustomAnimationExample(config: sharedConfig);
+      case ExampleType.activeField:
+        return ActiveFieldExample(config: sharedConfig);
     }
   }
 
@@ -1432,6 +1652,8 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
         return 'Custom Placeholder Example';
       case ExampleType.customAnimation:
         return 'Custom Animation Example';
+      case ExampleType.activeField:
+        return 'Active Field Styling';
     }
   }
 }
@@ -1446,6 +1668,7 @@ enum ExampleType {
   gradient,
   customPlaceholder,
   customAnimation,
+  activeField,
 }
 
 void main() {

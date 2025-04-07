@@ -110,8 +110,8 @@ class PinTheme {
     double? errorBorderWidth,
     PinCodeFieldShape? shape,
     EdgeInsetsGeometry? fieldOuterPadding,
-    List<BoxShadow>? activeBoxShadow,
-    List<BoxShadow>? inActiveBoxShadow,
+    List<BoxShadow>? activeBoxShadows,
+    List<BoxShadow>? inActiveBoxShadows,
   }) {
     const defaultValues = PinTheme.defaults();
     return PinTheme.defaults(
@@ -129,8 +129,8 @@ class PinTheme {
       selectedFillColor: selectedFillColor ?? defaultValues.selectedFillColor,
       shape: shape ?? defaultValues.shape,
       fieldOuterPadding: fieldOuterPadding ?? defaultValues.fieldOuterPadding,
-      activeBoxShadows: activeBoxShadow, // Allow null
-      inActiveBoxShadows: inActiveBoxShadow, // Allow null
+      activeBoxShadows: activeBoxShadows, // Allow null
+      inActiveBoxShadows: inActiveBoxShadows, // Allow null
       activeBorderWidth:
           activeBorderWidth ?? borderWidth ?? defaultValues.activeBorderWidth,
       inactiveBorderWidth: inactiveBorderWidth ??
