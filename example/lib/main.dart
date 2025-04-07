@@ -288,6 +288,186 @@ class ReadOnlyExample extends StatelessWidget {
   }
 }
 
+class GradientExample extends StatelessWidget {
+  final PinConfig config;
+
+  const GradientExample({super.key, required this.config});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    // Define gradients
+    final textGradient = LinearGradient(
+      colors: [
+        Colors.purple,
+        Colors.blue,
+        Colors.green,
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    final backgroundGradient = LinearGradient(
+      colors: [
+        colorScheme.primaryContainer.withOpacity(0.2),
+        colorScheme.secondaryContainer.withOpacity(0.2),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    final borderGradient = LinearGradient(
+      colors: [
+        Colors.purple,
+        Colors.blue,
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "This example demonstrates how to apply gradient effects to the PIN code cells.",
+          style: textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 24),
+        Text(
+          "Text Gradient:",
+          style: textTheme.titleSmall,
+        ),
+        const SizedBox(height: 12),
+        PinCodeTextField(
+          length: 6,
+          obscureText: config['obscureText'],
+          readOnly: config['readOnly'],
+          enableContextMenu: config['enableContextMenu'],
+          onChanged: config['onChanged'],
+          onCompleted: config['onCompleted'],
+          textGradient: textGradient,
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(8),
+            fieldHeight: 50,
+            fieldWidth: 45,
+            fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+            activeColor: Colors.purple,
+            inactiveColor: Colors.blue.withOpacity(0.5),
+            selectedColor: Colors.green,
+            borderWidth: 1.5,
+          ),
+          animationType: AnimationType.scale,
+          animationDuration: const Duration(milliseconds: 300),
+          keyboardType: TextInputType.number,
+          textStyle: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          showCursor: true,
+          cursorColor: Colors.purple,
+        ),
+        const SizedBox(height: 32),
+        Text(
+          "Background Gradient (with shader mask for borders):",
+          style: textTheme.titleSmall,
+        ),
+        const SizedBox(height: 12),
+        ShaderMask(
+          shaderCallback: (bounds) => borderGradient.createShader(bounds),
+          child: PinCodeTextField(
+            length: 6,
+            obscureText: config['obscureText'],
+            readOnly: config['readOnly'],
+            enableContextMenu: config['enableContextMenu'],
+            onChanged: config['onChanged'],
+            onCompleted: config['onCompleted'],
+            pinTheme: PinTheme(
+              shape: PinCodeFieldShape.box,
+              borderRadius: BorderRadius.circular(8),
+              fieldHeight: 50,
+              fieldWidth: 45,
+              fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+              activeFillColor: Colors.white,
+              inactiveFillColor: Colors.white,
+              selectedFillColor: Colors.white,
+              activeColor: Colors.white, // Will be masked by gradient
+              inactiveColor: Colors.white, // Will be masked by gradient
+              selectedColor: Colors.white, // Will be masked by gradient
+              borderWidth: 2.0,
+            ),
+            animationType: AnimationType.fade,
+            animationDuration: const Duration(milliseconds: 300),
+            keyboardType: TextInputType.number,
+            textStyle: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.onBackground,
+            ),
+            enableActiveFill: true,
+            showCursor: true,
+            cursorColor: Colors.purple,
+          ),
+        ),
+        const SizedBox(height: 32),
+        Text(
+          "Combined Effects:",
+          style: textTheme.titleSmall,
+        ),
+        const SizedBox(height: 12),
+        Container(
+          decoration: BoxDecoration(
+            gradient: backgroundGradient,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colorScheme.primary.withOpacity(0.3),
+              width: 1,
+            ),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: PinCodeTextField(
+            length: 6,
+            obscureText: config['obscureText'],
+            readOnly: config['readOnly'],
+            enableContextMenu: config['enableContextMenu'],
+            onChanged: config['onChanged'],
+            onCompleted: config['onCompleted'],
+            textGradient: textGradient,
+            pinTheme: PinTheme(
+              shape: PinCodeFieldShape.circle,
+              borderRadius: BorderRadius.circular(30),
+              fieldHeight: 50,
+              fieldWidth: 50,
+              fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+              activeColor: Colors.purple,
+              inactiveColor: Colors.blue.withOpacity(0.5),
+              selectedColor: Colors.green,
+              activeFillColor: Colors.white.withOpacity(0.8),
+              inactiveFillColor: Colors.white.withOpacity(0.5),
+              selectedFillColor: Colors.white,
+              borderWidth: 1.5,
+            ),
+            animationType: AnimationType.scale,
+            animationDuration: const Duration(milliseconds: 300),
+            keyboardType: TextInputType.number,
+            textStyle: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+            enableActiveFill: true,
+            showCursor: true,
+            cursorColor: Colors.purple,
+            animateCursor: true,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class FormValidationExample extends StatefulWidget {
   final PinConfig config;
 
@@ -298,24 +478,46 @@ class FormValidationExample extends StatefulWidget {
 }
 
 class _FormValidationExampleState extends State<FormValidationExample> {
+  // --- Form State ---
   final _formKey = GlobalKey<FormState>();
   bool _isValid = false;
+  String? _submittedValue;
+  final _pinController = TextEditingController();
+
+  // --- Dispose Controllers ---
+  @override
+  void dispose() {
+    _pinController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Form Validation Example"),
-        const SizedBox(height: 10),
+        Text(
+          "Form validation demonstrates how to integrate the PIN code field with Flutter's form system.",
+          style: textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 24),
         Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                "Enter a 6-digit PIN code:",
+                style: textTheme.titleSmall,
+              ),
+              const SizedBox(height: 12),
               PinCodeFormField(
                 length: 6,
+                controller: _pinController,
                 obscureText: widget.config['obscureText'],
                 readOnly: widget.config['readOnly'],
                 enableContextMenu: widget.config['enableContextMenu'],
@@ -323,9 +525,20 @@ class _FormValidationExampleState extends State<FormValidationExample> {
                   widget.config['onChanged']?.call(value);
                   setState(() {
                     _isValid = _formKey.currentState?.validate() ?? false;
+                    _submittedValue = null; // Clear submitted value on change
                   });
                 },
-                onCompleted: widget.config['onCompleted'],
+                onCompleted: (value) {
+                  widget.config['onCompleted']?.call(value);
+                  setState(() {
+                    _isValid = _formKey.currentState?.validate() ?? false;
+                  });
+                },
+                onSaved: (value) {
+                  setState(() {
+                    _submittedValue = value;
+                  });
+                },
                 animationType: AnimationType.fade,
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
@@ -369,22 +582,88 @@ class _FormValidationExampleState extends State<FormValidationExample> {
                 animateCursor: true,
                 cursorBlinkDuration: const Duration(milliseconds: 800),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _isValid
-                    ? () {
-                        if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('PIN code validated successfully!'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                        }
-                      }
-                    : null,
-                child: const Text('Submit'),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: _isValid
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                setState(() {
+                                  _submittedValue = _pinController.text;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'PIN code validated successfully!'),
+                                    backgroundColor: Colors.green,
+                                    behavior: SnackBarBehavior.floating,
+                                    width: 300,
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                            }
+                          : null,
+                      icon: const Icon(Icons.check_circle),
+                      label: const Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        _formKey.currentState?.reset();
+                        setState(() {
+                          _isValid = false;
+                          _submittedValue = null;
+                        });
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Reset'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              if (_submittedValue != null) ...[
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle,
+                        color: colorScheme.primary,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Form submitted successfully with PIN: ${widget.config['obscureText'] ? '******' : _submittedValue}',
+                          style: TextStyle(
+                            color: colorScheme.onPrimaryContainer,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -393,18 +672,369 @@ class _FormValidationExampleState extends State<FormValidationExample> {
   }
 }
 
-void main() {
-  runApp(const PinCodeTextFieldsExampleApp());
+class CustomPlaceholderExample extends StatelessWidget {
+  final PinConfig config;
+
+  const CustomPlaceholderExample({super.key, required this.config});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "This example demonstrates how to customize placeholders in PIN code fields.",
+          style: textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 24),
+        Text(
+          "Text Character Placeholder:",
+          style: textTheme.titleSmall,
+        ),
+        const SizedBox(height: 12),
+        PinCodeTextField(
+          length: 6,
+          obscureText: config['obscureText'],
+          readOnly: config['readOnly'],
+          enableContextMenu: config['enableContextMenu'],
+          onChanged: config['onChanged'],
+          onCompleted: config['onCompleted'],
+          hintCharacter: "?",
+          hintStyle: TextStyle(
+            color: colorScheme.primary.withOpacity(0.5),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(8),
+            fieldHeight: 50,
+            fieldWidth: 45,
+            fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+            activeColor: colorScheme.primary,
+            inactiveColor: colorScheme.outline,
+            selectedColor: colorScheme.secondary,
+            activeFillColor: colorScheme.primaryContainer.withOpacity(0.3),
+            inactiveFillColor: colorScheme.surfaceVariant,
+            selectedFillColor: colorScheme.secondaryContainer.withOpacity(0.3),
+            borderWidth: 1.5,
+          ),
+          animationType: AnimationType.fade,
+          animationDuration: const Duration(milliseconds: 300),
+          keyboardType: TextInputType.number,
+          textStyle: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onBackground,
+          ),
+          enableActiveFill: true,
+          showCursor: true,
+          cursorColor: colorScheme.primary,
+        ),
+        const SizedBox(height: 32),
+        Text(
+          "Dash Placeholder:",
+          style: textTheme.titleSmall,
+        ),
+        const SizedBox(height: 12),
+        PinCodeTextField(
+          length: 6,
+          obscureText: config['obscureText'],
+          readOnly: config['readOnly'],
+          enableContextMenu: config['enableContextMenu'],
+          onChanged: config['onChanged'],
+          onCompleted: config['onCompleted'],
+          hintCharacter: "-",
+          hintStyle: TextStyle(
+            color: colorScheme.onSurface.withOpacity(0.5),
+            fontSize: 32,
+            fontWeight: FontWeight.w300,
+          ),
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.underline,
+            fieldHeight: 50,
+            fieldWidth: 45,
+            fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+            activeColor: colorScheme.primary,
+            inactiveColor: colorScheme.outline.withOpacity(0.5),
+            selectedColor: colorScheme.secondary,
+            borderWidth: 2,
+          ),
+          animationType: AnimationType.slide,
+          animationDuration: const Duration(milliseconds: 300),
+          keyboardType: TextInputType.number,
+          textStyle: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onBackground,
+          ),
+          showCursor: true,
+          cursorColor: colorScheme.primary,
+        ),
+        const SizedBox(height: 32),
+        Text(
+          "Custom Obscuring Widget:",
+          style: textTheme.titleSmall,
+        ),
+        const SizedBox(height: 12),
+        PinCodeTextField(
+          length: 6,
+          obscureText: true, // Force obscure for this example
+          readOnly: config['readOnly'],
+          enableContextMenu: config['enableContextMenu'],
+          onChanged: config['onChanged'],
+          onCompleted: config['onCompleted'],
+          obscuringWidget: Container(
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              shape: BoxShape.circle,
+            ),
+            width: 15,
+            height: 15,
+          ),
+          blinkWhenObscuring: true,
+          blinkDuration: const Duration(milliseconds: 800),
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(8),
+            fieldHeight: 50,
+            fieldWidth: 45,
+            fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+            activeColor: colorScheme.primary,
+            inactiveColor: colorScheme.outline,
+            selectedColor: colorScheme.secondary,
+            activeFillColor: colorScheme.primaryContainer.withOpacity(0.3),
+            inactiveFillColor: colorScheme.surfaceVariant,
+            selectedFillColor: colorScheme.secondaryContainer.withOpacity(0.3),
+            borderWidth: 1.5,
+          ),
+          animationType: AnimationType.fade,
+          animationDuration: const Duration(milliseconds: 300),
+          keyboardType: TextInputType.number,
+          textStyle: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onBackground,
+          ),
+          enableActiveFill: true,
+          showCursor: true,
+          cursorColor: colorScheme.primary,
+        ),
+      ],
+    );
+  }
 }
 
-// Enum to identify examples
-enum ExampleType {
-  basic,
-  underline,
-  circle,
-  custom,
-  readOnly,
-  formValidation,
+class CustomAnimationExample extends StatefulWidget {
+  final PinConfig config;
+
+  const CustomAnimationExample({super.key, required this.config});
+
+  @override
+  State<CustomAnimationExample> createState() => _CustomAnimationExampleState();
+}
+
+class _CustomAnimationExampleState extends State<CustomAnimationExample> {
+  AnimationType _selectedAnimationType = AnimationType.fade;
+  Duration _animationDuration = const Duration(milliseconds: 300);
+  Curve _animationCurve = Curves.easeInOut;
+  bool _animateCursor = true;
+
+  final List<AnimationType> _animationTypes = [
+    AnimationType.none,
+    AnimationType.fade,
+    AnimationType.scale,
+    AnimationType.slide,
+  ];
+
+  final Map<Curve, String> _curves = {
+    Curves.linear: 'Linear',
+    Curves.easeIn: 'Ease In',
+    Curves.easeOut: 'Ease Out',
+    Curves.easeInOut: 'Ease In Out',
+    Curves.elasticIn: 'Elastic In',
+    Curves.elasticOut: 'Elastic Out',
+    Curves.bounceIn: 'Bounce In',
+    Curves.bounceOut: 'Bounce Out',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "This example demonstrates different animation types and customizations for PIN code fields.",
+          style: textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 24),
+        PinCodeTextField(
+          length: 6,
+          obscureText: widget.config['obscureText'],
+          readOnly: widget.config['readOnly'],
+          enableContextMenu: widget.config['enableContextMenu'],
+          onChanged: widget.config['onChanged'],
+          onCompleted: widget.config['onCompleted'],
+          animationType: _selectedAnimationType,
+          animationDuration: _animationDuration,
+          animationCurve: _animationCurve,
+          animateCursor: _animateCursor,
+          cursorBlinkDuration: const Duration(milliseconds: 800),
+          cursorBlinkCurve: Curves.easeInOut,
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(8),
+            fieldHeight: 60,
+            fieldWidth: 50,
+            fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+            activeColor: colorScheme.primary,
+            inactiveColor: colorScheme.outline,
+            selectedColor: colorScheme.secondary,
+            activeFillColor: colorScheme.primaryContainer.withOpacity(0.3),
+            inactiveFillColor: colorScheme.surfaceVariant,
+            selectedFillColor: colorScheme.secondaryContainer.withOpacity(0.3),
+            borderWidth: 1.5,
+          ),
+          keyboardType: TextInputType.number,
+          textStyle: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onBackground,
+          ),
+          enableActiveFill: true,
+          showCursor: true,
+          cursorColor: colorScheme.primary,
+          cursorWidth: 2,
+          cursorHeight: 24,
+        ),
+        const SizedBox(height: 32),
+        Card(
+          elevation: 0,
+          color: colorScheme.surfaceVariant.withOpacity(0.5),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Animation Controls",
+                  style: textTheme.titleSmall,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Text("Animation Type:", style: textTheme.bodyMedium),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: DropdownButton<AnimationType>(
+                        value: _selectedAnimationType,
+                        isExpanded: true,
+                        onChanged: (AnimationType? value) {
+                          if (value != null) {
+                            setState(() {
+                              _selectedAnimationType = value;
+                            });
+                          }
+                        },
+                        items: _animationTypes
+                            .map<DropdownMenuItem<AnimationType>>(
+                                (AnimationType value) {
+                          return DropdownMenuItem<AnimationType>(
+                            value: value,
+                            child: Text(_getAnimationTypeName(value)),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Text("Animation Curve:", style: textTheme.bodyMedium),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: DropdownButton<Curve>(
+                        value: _animationCurve,
+                        isExpanded: true,
+                        onChanged: (Curve? value) {
+                          if (value != null) {
+                            setState(() {
+                              _animationCurve = value;
+                            });
+                          }
+                        },
+                        items: _curves.entries
+                            .map<DropdownMenuItem<Curve>>((entry) {
+                          return DropdownMenuItem<Curve>(
+                            value: entry.key,
+                            child: Text(entry.value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                    "Animation Duration: ${_animationDuration.inMilliseconds}ms",
+                    style: textTheme.bodyMedium),
+                Slider(
+                  value: _animationDuration.inMilliseconds.toDouble(),
+                  min: 100,
+                  max: 1000,
+                  divisions: 9,
+                  label: "${_animationDuration.inMilliseconds}ms",
+                  onChanged: (double value) {
+                    setState(() {
+                      _animationDuration =
+                          Duration(milliseconds: value.round());
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Text("Animate Cursor:", style: textTheme.bodyMedium),
+                    const Spacer(),
+                    Switch(
+                      value: _animateCursor,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _animateCursor = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _getAnimationTypeName(AnimationType type) {
+    switch (type) {
+      case AnimationType.none:
+        return 'None';
+      case AnimationType.fade:
+        return 'Fade';
+      case AnimationType.scale:
+        return 'Scale';
+      case AnimationType.slide:
+        return 'Slide';
+    }
+  }
 }
 
 class PinCodeTextFieldsExampleApp extends StatelessWidget {
@@ -413,34 +1043,50 @@ class PinCodeTextFieldsExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PIN Code Text Fields Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Pin Code Text Fields Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.blue,
-          selectionColor: Colors.blueAccent,
-          selectionHandleColor: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
         ),
+        useMaterial3: true,
       ),
-      home: const PinCodeDemoPage(),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system,
+      home: const PinCodeExamplesPage(),
     );
   }
 }
 
-class PinCodeDemoPage extends StatefulWidget {
-  const PinCodeDemoPage({super.key});
+class PinCodeExamplesPage extends StatefulWidget {
+  const PinCodeExamplesPage({super.key});
 
   @override
-  State<PinCodeDemoPage> createState() => _PinCodeDemoPageState();
+  State<PinCodeExamplesPage> createState() => _PinCodeExamplesPageState();
 }
 
-class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
-  // --- State for Controls ---
-  String _currentCode = "";
-  bool _obscureText = false;
-  bool _showContextMenu = true;
-  bool _isReadOnly = false;
+class _PinCodeExamplesPageState extends State<PinCodeExamplesPage> {
+  // --- Shared Configuration ---
+  final Map<String, dynamic> sharedConfig = {
+    'onChanged': (String value) {
+      // print(value);
+    },
+    'onCompleted': (String value) {
+      // print("Completed: $value");
+    },
+    'obscureText': false,
+    'readOnly': false,
+    'enableContextMenu': true,
+  };
+
+  // --- Example Selection ---
   ExampleType _selectedExample = ExampleType.basic;
 
   // --- Controllers (Specific examples might need their own) ---
@@ -449,15 +1095,8 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
   final TextEditingController _readOnlyController =
       TextEditingController(text: "1234");
 
-  // --- Snackbar Helper ---
-  final Duration _snackBarDuration = const Duration(milliseconds: 1200);
-  void _showSnackBar(String message) {
-    if (!mounted) return; // Check if the state is still mounted
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), duration: _snackBarDuration),
-    );
-  }
+  // --- For code display ---
+  String _currentCode = "";
 
   @override
   void dispose() {
@@ -468,114 +1107,194 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final isSmallScreen = MediaQuery.of(context).size.width < 600;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PIN Code Examples'),
+        title: const Text('Pin Code Text Fields'),
+        centerTitle: true,
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        elevation: 0,
       ),
-      body: Column(
-        // Use Column: Dropdown, Example, Controls
-        children: [
-          // --- Example Selector Dropdown ---
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            child: SegmentedButton<ExampleType>(
-              segments: <ButtonSegment<ExampleType>>[
-                ButtonSegment<ExampleType>(
-                  value: ExampleType.basic,
-                  label: const Text('Basic'),
-                ),
-                ButtonSegment<ExampleType>(
-                  value: ExampleType.underline,
-                  label: const Text('Underline'),
-                ),
-                ButtonSegment<ExampleType>(
-                  value: ExampleType.circle,
-                  label: const Text('Circle'),
-                ),
-                ButtonSegment<ExampleType>(
-                  value: ExampleType.custom,
-                  label: const Text('Custom'),
-                ),
-                ButtonSegment<ExampleType>(
-                  value: ExampleType.readOnly,
-                  label: const Text('Read-Only'),
-                ),
-                ButtonSegment<ExampleType>(
-                  value: ExampleType.formValidation,
-                  label: const Text('Form'),
-                ),
-              ],
-              selected: <ExampleType>{_selectedExample},
-              onSelectionChanged: (Set<ExampleType> newSelection) {
-                setState(() {
-                  _selectedExample = newSelection.first;
-                });
-              },
-            ),
-          ),
-          const Divider(),
-
-          // --- Selected Example Area ---
-          Expanded(
-            // Allow the example to take available space
-            child: SingleChildScrollView(
-              // Make the example area scrollable if needed
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: _buildSelectedExample(),
-            ),
-          ),
-          const Divider(),
-
-          // --- Control Pad ---
-          _buildControlPad(context),
-
-          // --- Current Code Display ---
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Center(
-              child: Text(
-                'Current Code: $_currentCode',
-                style: theme.textTheme.headlineSmall,
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _buildExampleSelector(),
+                  const SizedBox(height: 24),
+                  Card(
+                    elevation: 2,
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _getExampleName(_selectedExample),
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildSelectedExample(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildControlPanel(),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  // Helper to get readable names for enum values
-  String _getExampleName(ExampleType type) {
-    switch (type) {
-      case ExampleType.basic:
-        return 'Basic (Box Shape)';
-      case ExampleType.underline:
-        return 'Underline Shape';
-      case ExampleType.circle:
-        return 'Circle Shape (Custom Obscuring & Hint)';
-      case ExampleType.custom:
-        return 'Custom Theme (Gradient & Separator)';
-      case ExampleType.readOnly:
-        return 'Read-Only Example';
-      case ExampleType.formValidation:
-        return 'Form Validation Example';
-    }
+  Widget _buildExampleSelector() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SegmentedButton<ExampleType>(
+        segments: <ButtonSegment<ExampleType>>[
+          ButtonSegment<ExampleType>(
+            value: ExampleType.basic,
+            label: const Text('Basic'),
+            icon: const Icon(Icons.pin),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.underline,
+            label: const Text('Underline'),
+            icon: const Icon(Icons.horizontal_rule),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.circle,
+            label: const Text('Circle'),
+            icon: const Icon(Icons.circle_outlined),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.custom,
+            label: const Text('Custom'),
+            icon: const Icon(Icons.palette),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.readOnly,
+            label: const Text('Read-Only'),
+            icon: const Icon(Icons.lock),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.formValidation,
+            label: const Text('Form'),
+            icon: const Icon(Icons.check_circle),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.gradient,
+            label: const Text('Gradient'),
+            icon: const Icon(Icons.gradient),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.customPlaceholder,
+            label: const Text('Custom Placeholder'),
+            icon: const Icon(Icons.text_fields),
+          ),
+          ButtonSegment<ExampleType>(
+            value: ExampleType.customAnimation,
+            label: const Text('Custom Animation'),
+            icon: const Icon(Icons.animation),
+          ),
+        ],
+        selected: <ExampleType>{_selectedExample},
+        onSelectionChanged: (Set<ExampleType> newSelection) {
+          setState(() {
+            _selectedExample = newSelection.first;
+          });
+        },
+      ),
+    );
   }
 
-  // Builds the currently selected example widget
-  Widget _buildSelectedExample() {
-    final sharedConfig = {
-      'obscureText': _obscureText,
-      'enableContextMenu': _showContextMenu,
-      'readOnly': _isReadOnly && _selectedExample != ExampleType.readOnly,
-      'onChanged': (value) => setState(() => _currentCode = value),
-      'onCompleted': (value) => _showSnackBar("Completed: $value"),
-    };
+  Widget _buildControlPanel() {
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Controls',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: [
+                _buildControlButton(
+                  'Toggle Obscure',
+                  Icons.remove_red_eye,
+                  () {
+                    setState(() {
+                      sharedConfig['obscureText'] =
+                          !sharedConfig['obscureText'];
+                    });
+                  },
+                ),
+                _buildControlButton(
+                  'Toggle Read-Only',
+                  Icons.lock_outline,
+                  () {
+                    setState(() {
+                      sharedConfig['readOnly'] = !sharedConfig['readOnly'];
+                    });
+                  },
+                ),
+                _buildControlButton(
+                  'Toggle Context Menu',
+                  Icons.menu,
+                  () {
+                    setState(() {
+                      sharedConfig['enableContextMenu'] =
+                          !sharedConfig['enableContextMenu'];
+                    });
+                  },
+                ),
+                if (_selectedExample == ExampleType.basic ||
+                    _selectedExample == ExampleType.custom)
+                  _buildControlButton(
+                    'Trigger Error Shake',
+                    Icons.error_outline,
+                    () {
+                      _errorController.add(ErrorAnimationType.shake);
+                    },
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
+  Widget _buildControlButton(
+      String label, IconData icon, VoidCallback onPressed) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon),
+      label: Text(label),
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+    );
+  }
+
+  Widget _buildSelectedExample() {
     switch (_selectedExample) {
       case ExampleType.basic:
         return BasicExample(
@@ -595,91 +1314,51 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
         return ReadOnlyExample(config: sharedConfig);
       case ExampleType.formValidation:
         return FormValidationExample(config: sharedConfig);
+      case ExampleType.gradient:
+        return GradientExample(config: sharedConfig);
+      case ExampleType.customPlaceholder:
+        return CustomPlaceholderExample(config: sharedConfig);
+      case ExampleType.customAnimation:
+        return CustomAnimationExample(config: sharedConfig);
     }
   }
 
-  // Control Pad Widget
-  Widget _buildControlPad(BuildContext context) {
-    // ReadOnly example should ignore the toggle
-    final bool canToggleReadOnly = _selectedExample != ExampleType.readOnly;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-      child: Wrap(
-        spacing: 10,
-        runSpacing: 5,
-        alignment: WrapAlignment.center,
-        children: [
-          Chip(
-            label: const Text('Obscure'),
-            avatar: CircleAvatar(
-                child: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility)),
-            deleteIcon: Switch(
-              value: _obscureText,
-              onChanged: (bool value) => setState(() => _obscureText = value),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onDeleted: () {},
-          ),
-          Chip(
-            label: const Text('Context Menu'),
-            avatar: CircleAvatar(
-                child: Icon(_showContextMenu
-                    ? Icons.content_paste
-                    : Icons.content_paste_off)),
-            deleteIcon: Switch(
-              value: _showContextMenu,
-              // Disable toggle for read-only example
-              onChanged: canToggleReadOnly
-                  ? (bool value) => setState(() => _showContextMenu = value)
-                  : null,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onDeleted: () {},
-          ),
-          Chip(
-            label: const Text('ReadOnly'),
-            avatar: CircleAvatar(
-                child:
-                    Icon(_isReadOnly ? Icons.lock_outline : Icons.lock_open)),
-            deleteIcon: Switch(
-              value: _isReadOnly,
-              // Disable toggle for read-only example itself
-              onChanged: canToggleReadOnly
-                  ? (bool value) => setState(() => _isReadOnly = value)
-                  : null,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onDeleted: () {},
-          ),
-          // Conditionally show error buttons
-          if (_selectedExample == ExampleType.basic ||
-              _selectedExample == ExampleType.custom)
-            ElevatedButton(
-              onPressed: () {
-                if (_selectedExample == ExampleType.basic) {
-                  _errorController.add(ErrorAnimationType.shake);
-                } else if (_selectedExample == ExampleType.custom) {
-                  _errorController.add(ErrorAnimationType.shake);
-                }
-              },
-              child: const Text("Trigger Error Shake"),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orangeAccent),
-            ),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.clear),
-            label: const Text("Clear Displayed Code"),
-            onPressed: () {
-              // This only clears the displayed string, not the field itself easily
-              setState(() => _currentCode = "");
-              _showSnackBar("Displayed code cleared");
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-          ),
-        ],
-      ),
-    );
+  String _getExampleName(ExampleType type) {
+    switch (type) {
+      case ExampleType.basic:
+        return 'Basic (Box Shape)';
+      case ExampleType.underline:
+        return 'Underline Shape';
+      case ExampleType.circle:
+        return 'Circle Shape (Custom Obscuring & Hint)';
+      case ExampleType.custom:
+        return 'Custom Theme (Gradient & Separator)';
+      case ExampleType.readOnly:
+        return 'Read-Only Example';
+      case ExampleType.formValidation:
+        return 'Form Validation Example';
+      case ExampleType.gradient:
+        return 'Gradient Example';
+      case ExampleType.customPlaceholder:
+        return 'Custom Placeholder Example';
+      case ExampleType.customAnimation:
+        return 'Custom Animation Example';
+    }
   }
+}
+
+enum ExampleType {
+  basic,
+  underline,
+  circle,
+  custom,
+  readOnly,
+  formValidation,
+  gradient,
+  customPlaceholder,
+  customAnimation,
+}
+
+void main() {
+  runApp(const PinCodeTextFieldsExampleApp());
 }
