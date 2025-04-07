@@ -248,9 +248,58 @@ class CustomExample extends StatelessWidget {
 
 class ReadOnlyExample extends StatelessWidget {
   final PinConfig config;
-  final TextEditingController? controller;
 
-  const ReadOnlyExample({super.key, required this.config, this.controller});
+  const ReadOnlyExample({super.key, required this.config});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text("Read-Only Mode"),
+        const SizedBox(height: 10),
+        PinCodeTextField(
+          length: 6,
+          obscureText: config['obscureText'],
+          readOnly: true, // Force read-only
+          enableContextMenu: config['enableContextMenu'],
+          onChanged: config['onChanged'],
+          onCompleted: config['onCompleted'],
+          animationType: AnimationType.none,
+          controller: TextEditingController(text: "123456"), // Pre-filled
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(8),
+            fieldHeight: 50,
+            fieldWidth: 45,
+            activeFillColor: Theme.of(context).colorScheme.surfaceVariant,
+            inactiveFillColor: Theme.of(context).colorScheme.surfaceVariant,
+            selectedFillColor: Theme.of(context).colorScheme.surfaceVariant,
+            activeColor: Theme.of(context).colorScheme.outline,
+            inactiveColor: Theme.of(context).colorScheme.outline,
+            selectedColor: Theme.of(context).colorScheme.outline,
+            borderWidth: 1,
+          ),
+          enableActiveFill: true,
+          showCursor: false, // No cursor in read-only mode
+        ),
+      ],
+    );
+  }
+}
+
+class FormValidationExample extends StatefulWidget {
+  final PinConfig config;
+
+  const FormValidationExample({super.key, required this.config});
+
+  @override
+  State<FormValidationExample> createState() => _FormValidationExampleState();
+}
+
+class _FormValidationExampleState extends State<FormValidationExample> {
+  final _formKey = GlobalKey<FormState>();
+  bool _isValid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -259,35 +308,85 @@ class ReadOnlyExample extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text("Read-Only Example"),
+        const Text("Form Validation Example"),
         const SizedBox(height: 10),
-        PinCodeTextField(
-          length: 4, // Match controller text length
-          controller: controller, // Pre-fill with controller
-          readOnly: true, // Make it read-only
-          obscureText: false, // Don't obscure read-only
-          enableContextMenu: false, // Disable menu for read-only
-          onChanged: (value) {}, // No change expected
-          onCompleted: (value) {}, // No completion expected
-          pinTheme: PinTheme(
-            shape: PinCodeFieldShape.box,
-            borderRadius: BorderRadius.circular(8),
-            fieldHeight: 50,
-            fieldWidth: 45,
-            // --- Spacing ---
-            fieldOuterPadding:
-                const EdgeInsets.symmetric(horizontal: 4), // Add spacing
-            // Use greyed-out style for read-only
-            activeFillColor: colorScheme.onSurface.withOpacity(0.1),
-            inactiveFillColor: colorScheme.onSurface.withOpacity(0.1),
-            selectedFillColor: colorScheme.onSurface.withOpacity(0.1),
-            activeColor: colorScheme.onSurface.withOpacity(0.2),
-            inactiveColor: colorScheme.onSurface.withOpacity(0.2),
-            selectedColor: colorScheme.onSurface.withOpacity(0.2),
-            borderWidth: 1.5,
+        Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              PinCodeFormField(
+                length: 6,
+                obscureText: widget.config['obscureText'],
+                readOnly: widget.config['readOnly'],
+                enableContextMenu: widget.config['enableContextMenu'],
+                onChanged: (value) {
+                  widget.config['onChanged']?.call(value);
+                  setState(() {
+                    _isValid = _formKey.currentState?.validate() ?? false;
+                  });
+                },
+                onCompleted: widget.config['onCompleted'],
+                animationType: AnimationType.fade,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(8),
+                  fieldHeight: 50,
+                  fieldWidth: 45,
+                  fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  activeFillColor: colorScheme.primary.withOpacity(0.1),
+                  inactiveFillColor: colorScheme.surfaceVariant,
+                  selectedFillColor: colorScheme.secondary.withOpacity(0.1),
+                  activeColor: colorScheme.primary,
+                  inactiveColor: colorScheme.onSurface.withOpacity(0.3),
+                  selectedColor: colorScheme.secondary,
+                  errorBorderColor: colorScheme.error,
+                  borderWidth: 1.5,
+                ),
+                boxShadows: _defaultBoxShadow(context),
+                animationDuration: const Duration(milliseconds: 300),
+                enableActiveFill: true,
+                keyboardType: TextInputType.number,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'PIN code is required';
+                  }
+                  if (value.length < 6) {
+                    return 'Please enter all 6 digits';
+                  }
+                  if (value == '123456') {
+                    return 'Please use a more secure PIN';
+                  }
+                  return null;
+                },
+                errorTextStyle: TextStyle(
+                  color: colorScheme.error,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+                showCursor: true,
+                cursorColor: colorScheme.primary,
+                animateCursor: true,
+                cursorBlinkDuration: const Duration(milliseconds: 800),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _isValid
+                    ? () {
+                        if (_formKey.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('PIN code validated successfully!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                      }
+                    : null,
+                child: const Text('Submit'),
+              ),
+            ],
           ),
-          boxShadows: _defaultBoxShadow(context),
-          enableActiveFill: true,
         ),
       ],
     );
@@ -305,6 +404,7 @@ enum ExampleType {
   circle,
   custom,
   readOnly,
+  formValidation,
 }
 
 class PinCodeTextFieldsExampleApp extends StatelessWidget {
@@ -344,9 +444,7 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
   ExampleType _selectedExample = ExampleType.basic;
 
   // --- Controllers (Specific examples might need their own) ---
-  final StreamController<ErrorAnimationType> _basicErrorController =
-      StreamController<ErrorAnimationType>.broadcast();
-  final StreamController<ErrorAnimationType> _customErrorController =
+  final StreamController<ErrorAnimationType> _errorController =
       StreamController<ErrorAnimationType>.broadcast();
   final TextEditingController _readOnlyController =
       TextEditingController(text: "1234");
@@ -363,8 +461,7 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
 
   @override
   void dispose() {
-    _basicErrorController.close();
-    _customErrorController.close();
+    _errorController.close();
     _readOnlyController.dispose(); // Dispose controller managed here
     super.dispose();
   }
@@ -384,24 +481,39 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            child: DropdownButton<ExampleType>(
-              value: _selectedExample,
-              isExpanded: true,
-              onChanged: (ExampleType? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    _selectedExample = newValue;
-                    _currentCode = ""; // Reset code display on example change
-                  });
-                }
+            child: SegmentedButton<ExampleType>(
+              segments: <ButtonSegment<ExampleType>>[
+                ButtonSegment<ExampleType>(
+                  value: ExampleType.basic,
+                  label: const Text('Basic'),
+                ),
+                ButtonSegment<ExampleType>(
+                  value: ExampleType.underline,
+                  label: const Text('Underline'),
+                ),
+                ButtonSegment<ExampleType>(
+                  value: ExampleType.circle,
+                  label: const Text('Circle'),
+                ),
+                ButtonSegment<ExampleType>(
+                  value: ExampleType.custom,
+                  label: const Text('Custom'),
+                ),
+                ButtonSegment<ExampleType>(
+                  value: ExampleType.readOnly,
+                  label: const Text('Read-Only'),
+                ),
+                ButtonSegment<ExampleType>(
+                  value: ExampleType.formValidation,
+                  label: const Text('Form'),
+                ),
+              ],
+              selected: <ExampleType>{_selectedExample},
+              onSelectionChanged: (Set<ExampleType> newSelection) {
+                setState(() {
+                  _selectedExample = newSelection.first;
+                });
               },
-              items: ExampleType.values
-                  .map<DropdownMenuItem<ExampleType>>((ExampleType value) {
-                return DropdownMenuItem<ExampleType>(
-                  value: value,
-                  child: Text(_getExampleName(value)),
-                );
-              }).toList(),
             ),
           ),
           const Divider(),
@@ -449,6 +561,8 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
         return 'Custom Theme (Gradient & Separator)';
       case ExampleType.readOnly:
         return 'Read-Only Example';
+      case ExampleType.formValidation:
+        return 'Form Validation Example';
     }
   }
 
@@ -466,7 +580,7 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
       case ExampleType.basic:
         return BasicExample(
           config: sharedConfig,
-          errorController: _basicErrorController,
+          errorController: _errorController,
         );
       case ExampleType.underline:
         return UnderlineExample(config: sharedConfig);
@@ -475,17 +589,12 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
       case ExampleType.custom:
         return CustomExample(
           config: sharedConfig,
-          errorController: _customErrorController,
+          errorController: _errorController,
         );
       case ExampleType.readOnly:
-        // Override readOnly for the specific example
-        final readOnlyConfig = Map<String, dynamic>.from(sharedConfig);
-        readOnlyConfig['readOnly'] = true;
-        readOnlyConfig['enableContextMenu'] = false; // Disable context menu too
-        return ReadOnlyExample(
-          config: readOnlyConfig,
-          controller: _readOnlyController,
-        );
+        return ReadOnlyExample(config: sharedConfig);
+      case ExampleType.formValidation:
+        return FormValidationExample(config: sharedConfig);
     }
   }
 
@@ -550,9 +659,9 @@ class _PinCodeDemoPageState extends State<PinCodeDemoPage> {
             ElevatedButton(
               onPressed: () {
                 if (_selectedExample == ExampleType.basic) {
-                  _basicErrorController.add(ErrorAnimationType.shake);
+                  _errorController.add(ErrorAnimationType.shake);
                 } else if (_selectedExample == ExampleType.custom) {
-                  _customErrorController.add(ErrorAnimationType.shake);
+                  _errorController.add(ErrorAnimationType.shake);
                 }
               },
               child: const Text("Trigger Error Shake"),

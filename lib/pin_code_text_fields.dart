@@ -139,25 +139,22 @@ class PinCodeTextField extends StatefulWidget {
   /// Brightness dark or light choices for iOS keyboard.
   final Brightness? keyboardAppearance; // Kept
 
-  /// Validator for the [TextFormField] - **REMOVED** (Validation handled differently if needed)
-  // final FormFieldValidator<String>? validator; // Removed
+  /// Validator for the pin code field. Returns an error message string to display if the input is invalid, or null otherwise.
+  final FormFieldValidator<String>? validator;
 
-  /// An optional method to call with the final value when the form is saved - **REMOVED**
-  // final FormFieldSetter<String>? onSaved; // Removed
+  /// An optional method to call with the final value when the form is saved.
+  final FormFieldSetter<String>? onSaved;
 
-  /// enables auto validation for the [TextFormField] - **REMOVED**
-  // final AutovalidateMode autovalidateMode; // Removed
+  /// Auto validation mode for the form field.
+  final AutovalidateMode autovalidateMode;
 
-  /// The vertical padding from the [PinCodeTextField] to the error text - **REMOVED** (Handled by layout)
-  // final double errorTextSpace; // Removed
+  /// The vertical padding from the pin code field to the error text.
+  final double errorTextSpace;
 
-  /// Margin for the error text - **REMOVED** (Handled by layout)
-  // final EdgeInsets errorTextMargin; // Removed
+  /// Style for the error text.
+  final TextStyle? errorTextStyle;
 
-  /// [TextDirection] to control a direction in which text flows. - **REMOVED** (Handled by context)
-  // final TextDirection errorTextDirection; // Removed
-
-  /// Enables pin autofill for TextFormField. - **Kept** (Needs re-integration with AutofillClient on EditableText)
+  /// enables pin autofill for TextFormField. - **Kept** (Needs re-integration with AutofillClient on EditableText)
   final bool enablePinAutofill; // Kept (Needs implementation)
 
   /// Error animation duration
@@ -274,6 +271,11 @@ class PinCodeTextField extends StatefulWidget {
     this.enableContextMenu = true,
     this.selectionControls,
     this.contextMenuBuilder = _defaultContextMenuBuilder, // Use static default
+    this.validator,
+    this.onSaved,
+    this.autovalidateMode = AutovalidateMode.disabled,
+    this.errorTextSpace = 16.0,
+    this.errorTextStyle,
   })  : assert(obscuringCharacter.isNotEmpty),
         assert(length > 0);
 
@@ -296,4 +298,195 @@ class PinCodeTextField extends StatefulWidget {
   @override
   // Reference the state class declared in the separate file
   State<PinCodeTextField> createState() => _PinCodeTextFieldState();
+}
+
+/// A [FormField] wrapper around [PinCodeTextField] to enable form validation.
+class PinCodeFormField extends FormField<String> {
+  /// Creates a [PinCodeTextField] wrapped in a [FormField].
+  PinCodeFormField({
+    super.key,
+    required int length,
+    TextEditingController? controller,
+    bool obscureText = false,
+    String obscuringCharacter = '●',
+    Widget? obscuringWidget,
+    bool blinkWhenObscuring = false,
+    Duration blinkDuration = const Duration(milliseconds: 500),
+    ValueChanged<String>? onChanged,
+    ValueChanged<String>? onCompleted,
+    ValueChanged<String>? onSubmitted,
+    VoidCallback? onEditingComplete,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    Duration animationDuration = const Duration(milliseconds: 150),
+    Curve animationCurve = Curves.easeInOut,
+    AnimationType animationType = AnimationType.slide,
+    TextInputType keyboardType = TextInputType.visiblePassword,
+    bool autoFocus = false,
+    FocusNode? focusNode,
+    GestureTapCallback? onTap,
+    bool enabled = true,
+    List<TextInputFormatter> inputFormatters = const <TextInputFormatter>[],
+    TextStyle? textStyle,
+    bool useHapticFeedback = false,
+    HapticFeedbackTypes hapticFeedbackTypes = HapticFeedbackTypes.light,
+    bool enableActiveFill = false,
+    TextCapitalization textCapitalization = TextCapitalization.none,
+    TextInputAction textInputAction = TextInputAction.done,
+    bool autoDismissKeyboard = true,
+    bool autoDisposeControllers = true,
+    StreamController<ErrorAnimationType>? errorAnimationController,
+    bool Function(String? text)? beforeTextPaste,
+    PinTheme pinTheme = const PinTheme.defaults(),
+    Brightness? keyboardAppearance,
+    bool enablePinAutofill = true,
+    int errorAnimationDuration = 500,
+    List<BoxShadow>? boxShadows,
+    bool showCursor = true,
+    Color? cursorColor,
+    double cursorWidth = 2,
+    double? cursorHeight,
+    bool animateCursor = false,
+    Duration cursorBlinkDuration = const Duration(milliseconds: 500),
+    Curve cursorBlinkCurve = Curves.easeInOut,
+    String? hintCharacter,
+    TextStyle? hintStyle,
+    Gradient? textGradient,
+    bool readOnly = false,
+    bool autoUnfocus = true,
+    AutofillContextAction onAutoFillDisposeAction =
+        AutofillContextAction.commit,
+    EdgeInsets scrollPadding = const EdgeInsets.all(20),
+    IndexedWidgetBuilder? separatorBuilder,
+    bool enableContextMenu = true,
+    TextSelectionControls? selectionControls,
+    EditableTextContextMenuBuilder? contextMenuBuilder =
+        PinCodeTextField._defaultContextMenuBuilder,
+    super.validator,
+    super.onSaved,
+    super.initialValue,
+    super.autovalidateMode = AutovalidateMode.disabled,
+    double errorTextSpace = 16.0,
+    TextStyle? errorTextStyle,
+  }) : super(
+          builder: (FormFieldState<String> field) {
+            final _PinCodeFormFieldState state =
+                field as _PinCodeFormFieldState;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PinCodeTextField(
+                  length: length,
+                  controller: state._effectiveController,
+                  obscureText: obscureText,
+                  obscuringCharacter: obscuringCharacter,
+                  obscuringWidget: obscuringWidget,
+                  blinkWhenObscuring: blinkWhenObscuring,
+                  blinkDuration: blinkDuration,
+                  onChanged: (value) {
+                    field.didChange(value);
+                    onChanged?.call(value);
+                  },
+                  onCompleted: onCompleted,
+                  onSubmitted: onSubmitted,
+                  onEditingComplete: onEditingComplete,
+                  mainAxisAlignment: mainAxisAlignment,
+                  animationDuration: animationDuration,
+                  animationCurve: animationCurve,
+                  animationType: animationType,
+                  keyboardType: keyboardType,
+                  autoFocus: autoFocus,
+                  focusNode: focusNode,
+                  onTap: onTap,
+                  enabled: enabled,
+                  inputFormatters: inputFormatters,
+                  textStyle: textStyle,
+                  useHapticFeedback: useHapticFeedback,
+                  hapticFeedbackTypes: hapticFeedbackTypes,
+                  enableActiveFill: enableActiveFill,
+                  textCapitalization: textCapitalization,
+                  textInputAction: textInputAction,
+                  autoDismissKeyboard: autoDismissKeyboard,
+                  autoDisposeControllers: autoDisposeControllers,
+                  errorAnimationController: errorAnimationController,
+                  beforeTextPaste: beforeTextPaste,
+                  pinTheme: pinTheme,
+                  keyboardAppearance: keyboardAppearance,
+                  enablePinAutofill: enablePinAutofill,
+                  errorAnimationDuration: errorAnimationDuration,
+                  boxShadows: boxShadows,
+                  showCursor: showCursor,
+                  cursorColor: cursorColor,
+                  cursorWidth: cursorWidth,
+                  cursorHeight: cursorHeight,
+                  animateCursor: animateCursor,
+                  cursorBlinkDuration: cursorBlinkDuration,
+                  cursorBlinkCurve: cursorBlinkCurve,
+                  hintCharacter: hintCharacter,
+                  hintStyle: hintStyle,
+                  textGradient: textGradient,
+                  readOnly: readOnly,
+                  autoUnfocus: autoUnfocus,
+                  onAutoFillDisposeAction: onAutoFillDisposeAction,
+                  scrollPadding: scrollPadding,
+                  separatorBuilder: separatorBuilder,
+                  enableContextMenu: enableContextMenu,
+                  selectionControls: selectionControls,
+                  contextMenuBuilder: contextMenuBuilder,
+                ),
+                SizedBox(height: field.hasError ? errorTextSpace : 0),
+                if (field.hasError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      field.errorText!,
+                      style: errorTextStyle ??
+                          TextStyle(
+                            color: Theme.of(field.context).colorScheme.error,
+                            fontSize: 12,
+                          ),
+                    ),
+                  ),
+              ],
+            );
+          },
+        );
+
+  @override
+  FormFieldState<String> createState() => _PinCodeFormFieldState();
+}
+
+class _PinCodeFormFieldState extends FormFieldState<String> {
+  TextEditingController? _controller;
+
+  TextEditingController get _effectiveController => _controller!;
+
+  @override
+  PinCodeFormField get widget => super.widget as PinCodeFormField;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void didUpdateWidget(PinCodeFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      setValue(widget.initialValue);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void reset() {
+    _effectiveController.text = widget.initialValue ?? '';
+    super.reset();
+  }
 }
