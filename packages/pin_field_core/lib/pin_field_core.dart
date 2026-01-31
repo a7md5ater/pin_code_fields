@@ -46,6 +46,7 @@ export 'src/pin_cell_data.dart';
 
 // Core widget
 export 'src/pin_input.dart';
+export 'src/pin_input_controller.dart';
 export 'src/pin_input_scope.dart';
 
 // Form integration

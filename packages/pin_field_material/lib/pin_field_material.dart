@@ -30,15 +30,6 @@
 /// core package instead.
 library pin_field_material;
 
-// Re-export core types that consumers will need
-export 'package:pin_field_core/pin_field_core.dart'
-    show
-        PinCellData,
-        PinInput,
-        PinInputScope,
-        PinInputFormField,
-        HapticFeedbackType;
-
 // Theme
 export 'src/theme/material_pin_theme.dart';
 

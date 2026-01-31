@@ -31,8 +31,7 @@ class MaterialPinField extends StatefulWidget {
     required this.length,
     this.theme = const MaterialPinTheme(),
     // Controller
-    this.controller,
-    this.focusNode,
+    this.pinController,
     // Input behavior
     this.keyboardType = TextInputType.number,
     this.textInputAction = TextInputAction.done,
@@ -78,11 +77,11 @@ class MaterialPinField extends StatefulWidget {
   /// Theme configuration for the PIN field.
   final MaterialPinTheme theme;
 
-  /// Controller for the text input.
-  final TextEditingController? controller;
-
-  /// Focus node for managing keyboard focus.
-  final FocusNode? focusNode;
+  /// Controller for the PIN input.
+  ///
+  /// Provides programmatic access to text, error state, and focus.
+  /// If not provided, an internal controller is created.
+  final PinInputController? pinController;
 
   /// The type of keyboard to display.
   final TextInputType keyboardType;
@@ -194,8 +193,7 @@ class _MaterialPinFieldState extends State<MaterialPinField> {
       enabled: resolvedTheme.enableErrorShake,
       child: PinInput(
         length: widget.length,
-        controller: widget.controller,
-        focusNode: widget.focusNode,
+        pinController: widget.pinController,
         keyboardType: widget.keyboardType,
         textInputAction: widget.textInputAction,
         inputFormatters: widget.inputFormatters,

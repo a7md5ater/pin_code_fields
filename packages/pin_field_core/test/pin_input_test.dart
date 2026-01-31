@@ -132,7 +132,7 @@ void main() {
     });
 
     testWidgets('uses external controller', (tester) async {
-      final controller = TextEditingController(text: '12');
+      final controller = PinInputController(text: '12');
       List<PinCellData>? capturedCells;
 
       await tester.pumpWidget(
@@ -140,7 +140,7 @@ void main() {
           home: Scaffold(
             body: PinInput(
               length: 4,
-              controller: controller,
+              pinController: controller,
               builder: (context, cells) {
                 capturedCells = cells;
                 return Row(
@@ -161,7 +161,7 @@ void main() {
       expect(capturedCells![3].isFilled, false);
 
       // Update controller
-      controller.text = '1234';
+      controller.setText('1234');
       await tester.pump();
 
       expect(capturedCells!.every((c) => c.isFilled), true);

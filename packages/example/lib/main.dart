@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:pin_field_core/pin_field_core.dart';
 import 'package:pin_field_material/pin_field_material.dart';
 
 void main() {
@@ -314,20 +313,13 @@ class ErrorHandlingDemo extends StatefulWidget {
 }
 
 class _ErrorHandlingDemoState extends State<ErrorHandlingDemo> {
-  final _errorController = StreamController<void>.broadcast();
-  final _textController = TextEditingController();
-  bool _hasError = false;
+  // Use the new PinInputController for full control!
+  final _pinController = PinInputController();
 
   @override
   void dispose() {
-    _errorController.close();
-    _textController.dispose();
+    _pinController.dispose();
     super.dispose();
-  }
-
-  void _triggerError() {
-    _errorController.add(null);
-    setState(() => _hasError = true);
   }
 
   @override
@@ -346,23 +338,18 @@ class _ErrorHandlingDemoState extends State<ErrorHandlingDemo> {
             const SizedBox(height: 32),
             MaterialPinField(
               length: 4,
-              controller: _textController,
+              pinController: _pinController,
               autoFocus: true,
-              errorTrigger: _errorController.stream,
               theme: MaterialPinTheme(
                 shape: MaterialPinShape.outlined,
                 cellSize: const Size(56, 64),
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
                 errorColor: Theme.of(context).colorScheme.error,
               ),
-              onChanged: (_) {
-                if (_hasError) {
-                  setState(() => _hasError = false);
-                }
-              },
               onCompleted: (pin) {
                 if (pin != '1234') {
-                  _triggerError();
+                  // Trigger error using the controller!
+                  _pinController.triggerError();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -374,18 +361,34 @@ class _ErrorHandlingDemoState extends State<ErrorHandlingDemo> {
               },
             ),
             const SizedBox(height: 16),
-            if (_hasError)
-              Text(
-                'Incorrect PIN. Try 1234.',
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
+            // Use ListenableBuilder to react to controller changes
+            ListenableBuilder(
+              listenable: _pinController,
+              builder: (context, _) {
+                if (_pinController.hasError) {
+                  return Text(
+                    'Incorrect PIN. Try 1234.',
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
-                _textController.clear();
-                setState(() => _hasError = false);
+                // Clear using the controller!
+                _pinController.clear();
               },
               child: const Text('Clear'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Programmatically clear error without clearing text
+                _pinController.clearError();
+              },
+              child: const Text('Clear Error Only'),
             ),
           ],
         ),

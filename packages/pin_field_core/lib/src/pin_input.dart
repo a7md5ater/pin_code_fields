@@ -9,6 +9,7 @@ import 'gestures/selection_gesture_builder.dart';
 import 'haptics.dart';
 import 'input_capture/invisible_text_field.dart';
 import 'pin_cell_data.dart';
+import 'pin_input_controller.dart';
 import 'pin_input_scope.dart';
 
 /// Builder function for custom PIN cell rendering.
@@ -41,8 +42,7 @@ class PinInput extends StatefulWidget {
     required this.length,
     required this.builder,
     // Controller
-    this.controller,
-    this.focusNode,
+    this.pinController,
     // Input behavior
     this.keyboardType = TextInputType.number,
     this.textInputAction = TextInputAction.done,
@@ -94,15 +94,11 @@ class PinInput extends StatefulWidget {
   /// needed to render each cell.
   final PinCellBuilder builder;
 
-  /// Controller for the text input.
+  /// Controller for the PIN input.
   ///
+  /// Provides programmatic access to text, error state, and focus.
   /// If not provided, an internal controller will be created and managed.
-  final TextEditingController? controller;
-
-  /// Focus node for managing keyboard focus.
-  ///
-  /// If not provided, an internal focus node will be created and managed.
-  final FocusNode? focusNode;
+  final PinInputController? pinController;
 
   /// The type of keyboard to display.
   final TextInputType keyboardType;
@@ -205,9 +201,9 @@ class _PinInputState extends State<PinInput>
   // Constants
   static const _fallbackFocusDelay = Duration(milliseconds: 50);
 
-  // Controllers
-  TextEditingController? _controller;
-  FocusNode? _focusNode;
+  // Controller - created internally if not provided
+  PinInputController? _pinController;
+  bool _ownsController = false;
 
   // Gesture handling
   late TextSelectionGestureDetectorBuilder _gestureBuilder;
@@ -236,39 +232,62 @@ class _PinInputState extends State<PinInput>
   // Error subscription
   StreamSubscription<void>? _errorSubscription;
 
-  TextEditingController get _effectiveController => _controller!;
-  FocusNode get _effectiveFocusNode => _focusNode!;
+  PinInputController get _effectivePinController => _pinController!;
+  TextEditingController get _effectiveController =>
+      _effectivePinController.textController;
+  FocusNode get _effectiveFocusNode => _effectivePinController.focusNode;
 
   @override
   void initState() {
     super.initState();
-    _initController();
-    _initFocusNode();
+    _initPinController();
+    _effectiveController.addListener(_onTextChanged);
+    _effectiveFocusNode.addListener(_onFocusChanged);
     _gestureBuilder = TextSelectionGestureDetectorBuilder(delegate: this);
     _subscribeToErrors();
     _handleAutoFocus();
   }
 
-  void _initController() {
-    _controller = widget.controller ?? TextEditingController();
-    _controller!.addListener(_onTextChanged);
+  void _initPinController() {
+    if (widget.pinController != null) {
+      _pinController = widget.pinController;
+      _ownsController = false;
+    } else {
+      _pinController = PinInputController();
+      _ownsController = true;
+    }
+
+    // Attach for error triggering
+    _effectivePinController.attach(onErrorTriggered: _triggerErrorAnimation);
+    _effectivePinController.addListener(_onPinControllerChanged);
 
     // Ensure initial text doesn't exceed length
-    final initialText = _getLimitedText(_controller!.text);
-    if (initialText != _controller!.text) {
+    final initialText = _getLimitedText(_effectiveController.text);
+    if (initialText != _effectiveController.text) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          _controller!.text = initialText;
+          _effectiveController.text = initialText;
         }
       });
     }
 
-    _previousLength = _controller!.text.length;
+    _previousLength = _effectiveController.text.length;
   }
 
-  void _initFocusNode() {
-    _focusNode = widget.focusNode ?? FocusNode();
-    _focusNode!.addListener(_onFocusChanged);
+  void _onPinControllerChanged() {
+    if (mounted) {
+      // Sync error state from controller
+      final controllerHasError = _effectivePinController.hasError;
+      if (_isError != controllerHasError) {
+        setState(() => _isError = controllerHasError);
+      }
+    }
+  }
+
+  void _triggerErrorAnimation() {
+    if (mounted) {
+      setState(() => _isError = true);
+    }
   }
 
   void _subscribeToErrors() {
@@ -276,7 +295,9 @@ class _PinInputState extends State<PinInput>
     if (widget.errorTrigger != null) {
       _errorSubscription = widget.errorTrigger!.listen((_) {
         if (mounted) {
-          setState(() => _isError = true);
+          _isError = true;
+          _effectivePinController.setErrorState(true);
+          setState(() {});
         }
       });
     }
@@ -305,23 +326,21 @@ class _PinInputState extends State<PinInput>
   void didUpdateWidget(covariant PinInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // Controller change
-    if (widget.controller != oldWidget.controller) {
-      oldWidget.controller?.removeListener(_onTextChanged);
-      _controller?.removeListener(_onTextChanged);
-      if (oldWidget.controller == null) {
-        _controller?.dispose();
+    // Pin controller change
+    if (widget.pinController != oldWidget.pinController) {
+      // Detach old
+      _effectiveController.removeListener(_onTextChanged);
+      _effectiveFocusNode.removeListener(_onFocusChanged);
+      _effectivePinController.removeListener(_onPinControllerChanged);
+      _effectivePinController.detach();
+      if (_ownsController) {
+        _pinController?.dispose();
       }
-      _initController();
-    }
 
-    // Focus node change
-    if (widget.focusNode != oldWidget.focusNode) {
-      _focusNode?.removeListener(_onFocusChanged);
-      if (oldWidget.focusNode == null) {
-        _focusNode?.dispose();
-      }
-      _initFocusNode();
+      // Attach new
+      _initPinController();
+      _effectiveController.addListener(_onTextChanged);
+      _effectiveFocusNode.addListener(_onFocusChanged);
     }
 
     // Length change
@@ -337,15 +356,14 @@ class _PinInputState extends State<PinInput>
 
   @override
   void dispose() {
+    _effectivePinController.removeListener(_onPinControllerChanged);
+    _effectivePinController.detach();
     _errorSubscription?.cancel();
     _blinkTimer?.cancel();
-    _controller?.removeListener(_onTextChanged);
-    if (widget.controller == null) {
-      _controller?.dispose();
-    }
-    _focusNode?.removeListener(_onFocusChanged);
-    if (widget.focusNode == null) {
-      _focusNode?.dispose();
+    _effectiveController.removeListener(_onTextChanged);
+    _effectiveFocusNode.removeListener(_onFocusChanged);
+    if (_ownsController) {
+      _pinController?.dispose();
     }
     super.dispose();
   }
@@ -379,7 +397,9 @@ class _PinInputState extends State<PinInput>
 
     // Clear error on input
     if (_isError) {
-      setState(() => _isError = false);
+      _isError = false;
+      _effectivePinController.setErrorState(false);
+      setState(() {});
     }
 
     final currentText = _effectiveController.text;

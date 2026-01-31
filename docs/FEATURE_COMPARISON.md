@@ -200,8 +200,8 @@ This document lists all features from the existing `pin_code_fields` package (v9
 
 | Value | Description | New Package Status |
 |-------|-------------|-------------------|
-| `shake` | Trigger shake animation | ✅ Implemented (via stream emit) |
-| `clear` | Clear error state | ⚠️ Partial (clears on input) |
+| `shake` | Trigger shake animation | ✅ Implemented (via `PinInputController.triggerError()`) |
+| `clear` | Clear error state | ✅ Implemented (via `PinInputController.clearError()`) |
 
 ---
 
@@ -269,7 +269,7 @@ This document lists all features from the existing `pin_code_fields` package (v9
 - Separator builder
 
 ### Partially Implemented ⚠️
-- `ErrorAnimationType.clear` - auto-clears on input (better UX in most cases)
+- None! All major features are now implemented.
 
 ### Missing Features ❌
 1. **`obscuringWidget`** - Custom widget for obscuring (uses character only)
@@ -301,7 +301,49 @@ This document lists all features from the existing `pin_code_fields` package (v9
 1. **Headless Architecture**: Core `PinInput` widget is now headless - you provide the UI via `builder`
 2. **Material Implementation**: `MaterialPinField` provides ready-to-use Material Design UI
 3. **Theme System**: `MaterialPinTheme` resolves colors from `ColorScheme` if not specified
-4. **Error Handling**: Use `Stream<void>` instead of `StreamController<ErrorAnimationType>`
+4. **Controller**: Use `PinInputController` for programmatic control (text, error, focus)
+
+### PinInputController (New)
+
+The new `PinInputController` replaces both `TextEditingController`, `FocusNode`, and `errorAnimationController` with a single unified controller:
+
+```dart
+final controller = PinInputController();
+
+MaterialPinField(
+  length: 6,
+  pinController: controller,
+)
+
+// Text control
+controller.setText('1234');
+controller.clear();
+print(controller.text);
+
+// Error control (replaces StreamController<ErrorAnimationType>)
+controller.triggerError();  // Triggers error + shake animation
+controller.clearError();    // Clears error state programmatically
+print(controller.hasError);
+
+// Focus control
+controller.requestFocus();
+controller.unfocus();
+print(controller.hasFocus);
+
+// Access underlying controllers if needed
+controller.textController;  // TextEditingController
+controller.focusNode;       // FocusNode
+```
+
+If you need to provide your own TextEditingController or FocusNode:
+```dart
+final textController = TextEditingController();
+final focusNode = FocusNode();
+final controller = PinInputController(
+  textController: textController,
+  focusNode: focusNode,
+);
+```
 
 ---
 

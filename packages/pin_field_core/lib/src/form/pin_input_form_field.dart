@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../haptics.dart';
 import '../pin_input.dart';
+import '../pin_input_controller.dart';
 
 /// A [FormField] wrapper for [PinInput] that enables form validation.
 ///
@@ -34,8 +35,7 @@ class PinInputFormField extends FormField<String> {
     required int length,
     required PinCellBuilder builder,
     // Controller
-    TextEditingController? controller,
-    FocusNode? focusNode,
+    PinInputController? pinController,
     // Input behavior
     TextInputType keyboardType = TextInputType.number,
     TextInputAction textInputAction = TextInputAction.done,
@@ -68,6 +68,9 @@ class PinInputFormField extends FormField<String> {
     // Keyboard
     Brightness? keyboardAppearance,
     EdgeInsets scrollPadding = const EdgeInsets.all(20),
+    // Autofill
+    bool enableAutofill = false,
+    AutofillContextAction autofillContextAction = AutofillContextAction.commit,
     // Form field
     super.validator,
     super.onSaved,
@@ -88,8 +91,7 @@ class PinInputFormField extends FormField<String> {
                 PinInput(
                   length: length,
                   builder: builder,
-                  controller: state._effectiveController,
-                  focusNode: focusNode,
+                  pinController: state._effectiveController,
                   keyboardType: keyboardType,
                   textInputAction: textInputAction,
                   inputFormatters: inputFormatters,
@@ -118,6 +120,8 @@ class PinInputFormField extends FormField<String> {
                   errorTrigger: errorTrigger,
                   keyboardAppearance: keyboardAppearance,
                   scrollPadding: scrollPadding,
+                  enableAutofill: enableAutofill,
+                  autofillContextAction: autofillContextAction,
                 ),
                 if (field.hasError) ...[
                   SizedBox(height: errorTextSpace),
@@ -140,9 +144,9 @@ class PinInputFormField extends FormField<String> {
 }
 
 class _PinInputFormFieldState extends FormFieldState<String> {
-  TextEditingController? _controller;
+  PinInputController? _controller;
 
-  TextEditingController get _effectiveController => _controller!;
+  PinInputController get _effectiveController => _controller!;
 
   @override
   PinInputFormField get widget => super.widget as PinInputFormField;
@@ -150,7 +154,7 @@ class _PinInputFormFieldState extends FormFieldState<String> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialValue);
+    _controller = PinInputController(text: widget.initialValue);
   }
 
   @override
