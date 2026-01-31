@@ -7,6 +7,11 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
         TextSelectionGestureDetectorBuilderDelegate {
   // Implement delegate
 
+  // Constants
+  static const _fallbackFocusDelay = Duration(milliseconds: 50);
+  static const _defaultTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+  static const _errorShakeOffset = Offset(0.1, 0.0);
+
   TextEditingController? _textEditingController;
   late FocusNode _focusNode;
 
@@ -34,11 +39,10 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
 
   // --- State ---
   bool isInErrorMode = false;
+  int _previousTextLength = 0;
 
   // --- Styles ---
-  TextStyle get _textStyle =>
-      const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
-          .merge(widget.textStyle);
+  TextStyle get _textStyle => _defaultTextStyle.merge(widget.textStyle);
   TextStyle get _hintStyle => _textStyle
       .copyWith(
           color: widget.pinTheme.disabledColor) // Use disabled color for hint
@@ -62,7 +66,7 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
     );
     _offsetAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: const Offset(.1, 0.0),
+      end: _errorShakeOffset,
     ).animate(CurvedAnimation(
       parent: _errorAnimationController,
       curve: Curves.elasticIn,
@@ -107,7 +111,7 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
       FocusScope.of(context).requestFocus(_focusNode);
     } else if (mounted) {
       // Fallback if context isn't immediately ready after frame callback
-      Future.delayed(const Duration(milliseconds: 50), () {
+      Future.delayed(_fallbackFocusDelay, () {
         if (mounted && _focusNode.context != null) {
           FocusScope.of(context).requestFocus(_focusNode);
         }
@@ -186,20 +190,22 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
     }
 
     // 2. Update internal state and call callbacks
-    final previousLength = _controller.value.text.length;
     final currentLength = limitedText.length;
 
     // Call onChanged regardless of completion
     widget.onChanged?.call(limitedText);
 
-    // Check for completion
-    if (currentLength == widget.length && previousLength < widget.length) {
+    // Check for completion (using tracked previous length)
+    if (currentLength == widget.length && _previousTextLength < widget.length) {
       widget.onCompleted?.call(limitedText);
       if (widget.autoDismissKeyboard) {
         // Use FocusManager for more reliable keyboard dismissal
         FocusManager.instance.primaryFocus?.unfocus();
       }
     }
+
+    // Update tracked length for next change
+    _previousTextLength = currentLength;
 
     // Handle blink effect
     _debounceBlink();
@@ -271,10 +277,11 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
     if (widget.controller == null) {
       _textEditingController?.dispose();
     }
+
+    // Remove focus listener before disposing
+    _focusNode.removeListener(_onFocusChanged);
     if (widget.focusNode == null) {
       _focusNode.dispose();
-      // Only remove listener if not disposing focus node provided externally
-      _focusNode.removeListener(_onFocusChanged);
     }
 
     super.dispose();

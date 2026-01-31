@@ -189,6 +189,8 @@ class PinCodeTextField extends StatefulWidget {
   final bool readOnly;
 
   /// Enable auto unfocus
+  /// @deprecated This parameter is not used. Use autoDismissKeyboard instead.
+  @Deprecated('This parameter has no effect. Use autoDismissKeyboard instead.')
   final bool autoUnfocus;
 
   /// Builds separator children
