@@ -30,8 +30,8 @@ class PinCellStateStyle {
   /// Priority order (first match wins):
   /// 1. Disabled - grayed out appearance
   /// 2. Error - error color with emphasis
-  /// 3. Complete - all cells filled (success indication)
-  /// 4. Focused - highlighted with focus indicators
+  /// 3. Focused - highlighted with focus indicators
+  /// 4. Complete - all cells filled (success indication)
   /// 5. Filled - has content, normal appearance
   /// 6. Following - empty cells after the focused cell
   /// 7. Empty - default appearance
@@ -56,22 +56,23 @@ class PinCellStateStyle {
       );
     }
 
-    // Complete state - when all cells are filled
-    if (data.isComplete && data.isFilled) {
-      return PinCellStateStyle(
-        fillColor: theme.completeFillColor,
-        borderColor: theme.completeBorderColor,
-        borderWidth: theme.borderWidth,
-        boxShadows: theme.boxShadows,
-      );
-    }
-
+    // Focused state - check before complete so focused cell is highlighted
     if (data.isFocused) {
       return PinCellStateStyle(
         fillColor: theme.focusedFillColor,
         borderColor: theme.focusedBorderColor,
         borderWidth: theme.focusedBorderWidth,
         boxShadows: theme.focusedBoxShadows,
+      );
+    }
+
+    // Complete state - when all cells are filled (but not focused)
+    if (data.isComplete && data.isFilled) {
+      return PinCellStateStyle(
+        fillColor: theme.completeFillColor,
+        borderColor: theme.completeBorderColor,
+        borderWidth: theme.borderWidth,
+        boxShadows: theme.boxShadows,
       );
     }
 

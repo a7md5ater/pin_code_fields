@@ -660,8 +660,9 @@ class _PinInputState extends State<PinInput>
   List<PinCellData> _buildCells() {
     final text = _textController.text;
     final cells = <PinCellData>[];
-    final focusedIndex = text.length; // The next input position
     final isComplete = text.length == widget.length;
+    // When complete, focus the last cell; otherwise focus the next empty cell
+    final focusedIndex = isComplete ? text.length - 1 : text.length;
 
     for (int i = 0; i < widget.length; i++) {
       final isFilled = i < text.length;
