@@ -43,6 +43,7 @@
 library pin_code_fields_liquid_glass;
 
 export 'src/liquid_glass_pin_field.dart';
+export 'src/liquid_glass_pin_form_field.dart';
 export 'src/theme/liquid_glass_pin_theme.dart';
 
 // Re-export useful types from pin_code_fields

@@ -93,8 +93,39 @@ LiquidGlassPinField(
 | `thickness` | `double` | `20` | Glass material thickness |
 | `glassColor` | `Color?` | auto | Base glass color |
 | `textStyle` | `TextStyle?` | auto | PIN text style |
+| `showCursor` | `bool` | `true` | Show cursor in focused cell |
+
+### Glass Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `visibility` | `double` | `1.0` | Glass visibility (0-1) |
+| `chromaticAberration` | `double` | `0.01` | Color fringing effect |
+| `lightAngle` | `double?` | auto | Light source angle |
+| `lightIntensity` | `double` | `0.5` | Light reflection intensity |
+| `ambientStrength` | `double` | `0` | Ambient light strength |
+| `refractiveIndex` | `double` | `1.2` | Glass refraction amount |
+| `saturation` | `double` | `1.5` | Color saturation boost |
+
+### Glow Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
 | `enableGlowOnFocus` | `bool` | `true` | Glow on focused cell |
+| `glowColor` | `Color?` | auto | Default glow color |
+| `focusedGlowColor` | `Color?` | auto | Focused state glow |
+| `filledGlowColor` | `Color?` | auto | Filled state glow |
+| `errorGlowColor` | `Color?` | auto | Error state glow |
+| `glowRadius` | `double` | `1.0` | Glow spread radius |
+
+### Stretch Animation Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
 | `enableStretchAnimation` | `bool` | `true` | Stretch on character entry |
+| `stretchInteractionScale` | `double` | `1.05` | Scale during stretch |
+| `stretchAmount` | `double` | `0.5` | Stretch intensity |
+| `stretchResistance` | `double` | `0.08` | Stretch spring resistance |
 
 ### Separate Style Properties
 
@@ -120,6 +151,48 @@ LiquidGlassPinField(
 | `blendAmount` | `double` | `0.3` | Blend intensity (0-1) |
 | `borderRadius` | `double` | `12` | Cell corner radius |
 | `overlapOffset` | `double` | `0` | Cell overlap amount |
+
+## Form Validation
+
+Use `LiquidGlassPinFormField` for form integration with validation:
+
+```dart
+final _formKey = GlobalKey<FormState>();
+
+Form(
+  key: _formKey,
+  child: LiquidGlassPinFormField(
+    length: 6,
+    theme: LiquidGlassPinTheme.blended(),
+    validator: (value) {
+      if (value == null || value.length < 6) {
+        return 'Please enter all 6 digits';
+      }
+      if (value != '123456') {
+        return 'Invalid PIN';
+      }
+      return null;
+    },
+    onSaved: (value) => print('PIN saved: $value'),
+  ),
+)
+
+// Validate:
+if (_formKey.currentState!.validate()) {
+  _formKey.currentState!.save();
+}
+```
+
+### Form Field Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `validator` | `String? Function(String?)` | - | Validation function |
+| `onSaved` | `void Function(String?)` | - | Called on form save |
+| `autovalidateMode` | `AutovalidateMode` | `disabled` | When to auto-validate |
+| `initialValue` | `String?` | - | Initial PIN value |
+| `errorTextSpace` | `double` | `8.0` | Space above error text |
+| `errorTextStyle` | `TextStyle?` | auto | Error text styling |
 
 ## Controller
 
