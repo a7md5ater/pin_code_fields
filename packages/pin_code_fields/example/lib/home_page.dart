@@ -13,6 +13,7 @@ import 'demos/quick_start/basic_demo.dart';
 import 'demos/quick_start/controller_demo.dart';
 import 'demos/shapes_themes/shape_gallery_demo.dart';
 import 'demos/shapes_themes/color_customization_demo.dart';
+import 'demos/shapes_themes/shadows_demo.dart';
 import 'demos/animations/entry_animations_demo.dart';
 import 'demos/animations/custom_cursor_demo.dart';
 import 'demos/state_theming/all_states_demo.dart';
@@ -21,7 +22,13 @@ import 'demos/customization/headless_builder_demo.dart';
 import 'demos/customization/hints_demo.dart';
 import 'demos/customization/obscure_text_demo.dart';
 import 'demos/customization/separators_demo.dart';
+import 'demos/customization/text_gradient_demo.dart';
 import 'demos/interactions/clipboard_demo.dart';
+import 'demos/interactions/form_validation_demo.dart';
+import 'demos/interactions/autofill_demo.dart';
+
+// Playground
+import 'playground/playground_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -46,6 +53,14 @@ class HomePage extends StatelessWidget {
             _UseCasesTab(),
             _FeaturesTab(),
           ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const PlaygroundPage()),
+          ),
+          icon: const Icon(Icons.tune),
+          label: const Text('Playground'),
         ),
       ),
     );
@@ -219,6 +234,10 @@ class _FeaturesTab extends StatelessWidget {
               title: 'Color Customization',
               page: const ColorCustomizationDemo(),
             ),
+            _FeatureItem(
+              title: 'Shadows & Elevation',
+              page: const ShadowsDemo(),
+            ),
           ],
         ),
         _FeatureSection(
@@ -266,6 +285,10 @@ class _FeaturesTab extends StatelessWidget {
               title: 'Separators',
               page: const SeparatorsDemo(),
             ),
+            _FeatureItem(
+              title: 'Text Gradient',
+              page: const TextGradientDemo(),
+            ),
           ],
         ),
         _FeatureSection(
@@ -274,6 +297,14 @@ class _FeaturesTab extends StatelessWidget {
             _FeatureItem(
               title: 'Clipboard Detection',
               page: const ClipboardDemo(),
+            ),
+            _FeatureItem(
+              title: 'Form Validation',
+              page: const FormValidationDemo(),
+            ),
+            _FeatureItem(
+              title: 'Autofill & SMS',
+              page: const AutofillDemo(),
             ),
           ],
         ),
