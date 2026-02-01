@@ -77,7 +77,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       builder: (context) => AlertDialog(
         icon: const Icon(Icons.check_circle, color: Colors.green, size: 64),
         title: const Text('Verified!'),
-        content: const Text('Your phone number has been verified successfully.'),
+        content:
+            const Text('Your phone number has been verified successfully.'),
         actions: [
           FilledButton(
             onPressed: () {
@@ -123,105 +124,109 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       body: Stack(
         children: [
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Spacer(),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Spacer(),
 
-                  // Icon
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer,
-                      shape: BoxShape.circle,
+                    // Icon
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: colorScheme.primaryContainer,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.sms_outlined,
+                        size: 40,
+                        color: colorScheme.primary,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.sms_outlined,
-                      size: 40,
-                      color: colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                  // Title
-                  Text(
-                    'Verification Code',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Subtitle
-                  Text(
-                    'We sent a code to +1 (555) ***-1234',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
-
-                  // PIN Field
-                  MaterialPinField(
-                    length: 6,
-                    pinController: _pinController,
-                    autoFocus: true,
-                    enabled: !_isLoading,
-                    theme: MaterialPinTheme(
-                      shape: MaterialPinShape.outlined,
-                      cellSize: const Size(48, 56),
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      borderWidth: 1.5,
-                      focusedBorderWidth: 2,
-                      focusedBorderColor: colorScheme.primary,
-                      filledBorderColor: colorScheme.outline,
-                      errorBorderWidth: 2,
-                    ),
-                    errorText: 'Invalid code. Please try again.',
-                    onClipboardFound: (code) {
-                      setState(() => _clipboardCode = code);
-                    },
-                    onCompleted: _verifyOtp,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Paste from clipboard button
-                  if (_clipboardCode != null)
-                    FilledButton.tonal(
-                      onPressed: _pasteCode,
-                      child: Text('Paste $_clipboardCode'),
-                    ),
-
-                  const SizedBox(height: 24),
-
-                  // Resend section
-                  if (_resendSeconds > 0)
+                    // Title
                     Text(
-                      'Resend code in ${_formatTime(_resendSeconds)}',
+                      'Verification Code',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // Subtitle
+                    Text(
+                      'We sent a code to +1 (555) ***-1234',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
-                    )
-                  else
-                    TextButton(
-                      onPressed: _resendCode,
-                      child: const Text('Resend Code'),
+                      textAlign: TextAlign.center,
                     ),
+                    const SizedBox(height: 32),
 
-                  const Spacer(flex: 2),
+                    // PIN Field
+                    MaterialPinField(
+                      length: 6,
+                      pinController: _pinController,
+                      autoFocus: true,
+                      enabled: !_isLoading,
+                      theme: MaterialPinTheme(
+                        shape: MaterialPinShape.outlined,
+                        cellSize: const Size(48, 56),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
+                        borderWidth: 1.5,
+                        focusedBorderWidth: 2,
+                        focusedBorderColor: colorScheme.primary,
+                        filledBorderColor: colorScheme.outline,
+                        errorBorderWidth: 2,
+                      ),
+                      errorText: 'Invalid code. Please try again.',
+                      onClipboardFound: (code) {
+                        setState(() => _clipboardCode = code);
+                      },
+                      onCompleted: _verifyOtp,
+                    ),
+                    const SizedBox(height: 16),
 
-                  // Hint text
-                  Text(
-                    'Try entering 123456 for success',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: colorScheme.outline,
-                        ),
-                  ),
-                ],
+                    // Paste from clipboard button
+                    if (_clipboardCode != null)
+                      FilledButton.tonal(
+                        onPressed: _pasteCode,
+                        child: Text('Paste $_clipboardCode'),
+                      ),
+
+                    const SizedBox(height: 24),
+
+                    // Resend section
+                    if (_resendSeconds > 0)
+                      Text(
+                        'Resend code in ${_formatTime(_resendSeconds)}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                      )
+                    else
+                      TextButton(
+                        onPressed: _resendCode,
+                        child: const Text('Resend Code'),
+                      ),
+
+                    const Spacer(flex: 2),
+
+                    // Hint text
+                    Text(
+                      'Try entering 123456 for success',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: colorScheme.outline,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

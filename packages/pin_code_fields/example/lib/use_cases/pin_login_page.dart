@@ -161,126 +161,128 @@ class _PinLoginPageState extends State<PinLoginPage> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Spacer(),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(),
 
-              // Avatar
-              CircleAvatar(
-                radius: 48,
-                backgroundColor: colorScheme.primaryContainer,
-                child: Icon(
-                  Icons.person,
-                  size: 48,
-                  color: colorScheme.primary,
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              Text(
-                'Welcome back!',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 8),
-
-              Text(
-                'Enter your PIN to continue',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-              ),
-              const SizedBox(height: 48),
-
-              // PIN Field
-              MaterialPinField(
-                length: 4,
-                pinController: _pinController,
-                autoFocus: true,
-                enabled: !_isLocked,
-                obscureText: true,
-                theme: MaterialPinTheme(
-                  shape: MaterialPinShape.circle,
-                  cellSize: const Size(56, 56),
-                  borderWidth: 2,
-                  focusedBorderWidth: 3,
-                  obscuringCharacter: '●',
-                  textStyle: const TextStyle(fontSize: 24),
-                  fillColor: colorScheme.surfaceContainerHighest,
-                  focusedFillColor: colorScheme.primaryContainer,
-                  filledFillColor: colorScheme.primaryContainer,
-                ),
-                onCompleted: _onPinComplete,
-              ),
-              const SizedBox(height: 24),
-
-              // Attempts warning
-              if (_attempts > 0 && !_isLocked)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+                // Avatar
+                CircleAvatar(
+                  radius: 48,
+                  backgroundColor: colorScheme.primaryContainer,
+                  child: Icon(
+                    Icons.person,
+                    size: 48,
+                    color: colorScheme.primary,
                   ),
-                  decoration: BoxDecoration(
-                    color: remainingAttempts <= 2
-                        ? colorScheme.errorContainer
-                        : colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.warning_amber_rounded,
-                        size: 18,
-                        color: remainingAttempts <= 2
-                            ? colorScheme.error
-                            : colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(height: 16),
+
+                Text(
+                  'Welcome back!',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '$remainingAttempts attempts remaining',
-                        style: TextStyle(
+                ),
+                const SizedBox(height: 8),
+
+                Text(
+                  'Enter your PIN to continue',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                ),
+                const SizedBox(height: 48),
+
+                // PIN Field
+                MaterialPinField(
+                  length: 4,
+                  pinController: _pinController,
+                  autoFocus: true,
+                  enabled: !_isLocked,
+                  obscureText: true,
+                  theme: MaterialPinTheme(
+                    shape: MaterialPinShape.circle,
+                    cellSize: const Size(56, 56),
+                    borderWidth: 2,
+                    focusedBorderWidth: 3,
+                    obscuringCharacter: '●',
+                    textStyle: const TextStyle(fontSize: 24),
+                    fillColor: colorScheme.surfaceContainerHighest,
+                    focusedFillColor: colorScheme.primaryContainer,
+                    filledFillColor: colorScheme.primaryContainer,
+                  ),
+                  onCompleted: _onPinComplete,
+                ),
+                const SizedBox(height: 24),
+
+                // Attempts warning
+                if (_attempts > 0 && !_isLocked)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: remainingAttempts <= 2
+                          ? colorScheme.errorContainer
+                          : colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          size: 18,
                           color: remainingAttempts <= 2
                               ? colorScheme.error
                               : colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        Text(
+                          '$remainingAttempts attempts remaining',
+                          style: TextStyle(
+                            color: remainingAttempts <= 2
+                                ? colorScheme.error
+                                : colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+
+                const Spacer(),
+
+                // Biometric button
+                OutlinedButton.icon(
+                  onPressed: _isLocked ? null : _useBiometric,
+                  icon: const Icon(Icons.fingerprint),
+                  label: const Text('Use Fingerprint'),
+                ),
+                const SizedBox(height: 12),
+
+                // Forgot PIN
+                TextButton(
+                  onPressed: _forgotPin,
+                  child: const Text('Forgot PIN?'),
                 ),
 
-              const Spacer(),
+                const SizedBox(height: 24),
 
-              // Biometric button
-              OutlinedButton.icon(
-                onPressed: _isLocked ? null : _useBiometric,
-                icon: const Icon(Icons.fingerprint),
-                label: const Text('Use Fingerprint'),
-              ),
-              const SizedBox(height: 12),
-
-              // Forgot PIN
-              TextButton(
-                onPressed: _forgotPin,
-                child: const Text('Forgot PIN?'),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Hint
-              Text(
-                'Hint: PIN is 1234',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.outline,
-                    ),
-              ),
-            ],
+                // Hint
+                Text(
+                  'Hint: PIN is 1234',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colorScheme.outline,
+                      ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

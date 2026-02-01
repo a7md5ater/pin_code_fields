@@ -147,6 +147,7 @@ class _AppLockScreenState extends State<AppLockScreen> {
               pinController: _pinController,
               autoFocus: true,
               obscureText: true,
+              blinkWhenObscuring: false, // Always obscure for lock screen
               hapticFeedbackType: HapticFeedbackType.light,
               // Custom dot widget for obscuring
               obscuringWidget: Container(
