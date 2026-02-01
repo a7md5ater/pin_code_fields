@@ -466,12 +466,14 @@ class MaterialPinTheme {
       borderColor: borderColor ?? colorScheme.outline,
       focusedBorderColor: focusedBorderColor ?? colorScheme.primary,
       filledBorderColor: filledBorderColor ?? colorScheme.outline,
-      followingFillColor:
-          followingFillColor ?? fillColor ?? colorScheme.surfaceContainerHighest,
+      followingFillColor: followingFillColor ??
+          fillColor ??
+          colorScheme.surfaceContainerHighest,
       followingBorderColor:
           followingBorderColor ?? borderColor ?? colorScheme.outline,
-      completeFillColor:
-          completeFillColor ?? filledFillColor ?? colorScheme.surfaceContainerHighest,
+      completeFillColor: completeFillColor ??
+          filledFillColor ??
+          colorScheme.surfaceContainerHighest,
       completeBorderColor:
           completeBorderColor ?? filledBorderColor ?? colorScheme.outline,
       completeTextStyle: completeTextStyle ?? resolvedTextStyle,
@@ -480,8 +482,8 @@ class MaterialPinTheme {
           errorFillColor ?? resolvedErrorColor.withValues(alpha: 0.1),
       errorBorderColor: errorBorderColor ?? resolvedErrorColor,
       errorBorderWidth: errorBorderWidth ?? focusedBorderWidth,
-      errorTextStyle:
-          errorTextStyle ?? resolvedTextStyle?.copyWith(color: resolvedErrorColor),
+      errorTextStyle: errorTextStyle ??
+          resolvedTextStyle?.copyWith(color: resolvedErrorColor),
       errorBoxShadows: errorBoxShadows,
       disabledColor: resolvedDisabledColor,
       disabledFillColor:

@@ -20,45 +20,45 @@ class _BasicDemoState extends State<BasicDemo> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
-          children: [
-            const Text(
-              'Enter PIN',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'The simplest MaterialPinField example',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+            children: [
+              const Text(
+                'Enter PIN',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 32),
+              const SizedBox(height: 8),
+              Text(
+                'The simplest MaterialPinField example',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 32),
 
-            // The simplest usage!
-            MaterialPinField(
-              length: 6,
-              onChanged: (value) => setState(() => _enteredPin = value),
-              onCompleted: (pin) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Completed: $pin')),
-                );
-              },
-            ),
+              // The simplest usage!
+              MaterialPinField(
+                length: 6,
+                onChanged: (value) => setState(() => _enteredPin = value),
+                onCompleted: (pin) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Completed: $pin')),
+                  );
+                },
+              ),
 
-            const SizedBox(height: 24),
-            Text('Entered: $_enteredPin'),
-            const SizedBox(height: 48),
+              const SizedBox(height: 24),
+              Text('Entered: $_enteredPin'),
+              const SizedBox(height: 48),
 
-            // Code snippet
-            _CodeSnippet(
-              code: '''
+              // Code snippet
+              _CodeSnippet(
+                code: '''
 MaterialPinField(
   length: 6,
   onChanged: (value) => print(value),
   onCompleted: (pin) => print('Completed: \$pin'),
 )''',
-            ),
-          ],
+              ),
+            ],
           ),
         ),
       ),

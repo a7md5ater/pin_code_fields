@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 TextSelectionControls getDefaultSelectionControls(BuildContext context) {
   final platform = Theme.of(context).platform;
   return switch (platform) {
-    TargetPlatform.iOS || TargetPlatform.macOS =>
+    TargetPlatform.iOS ||
+    TargetPlatform.macOS =>
       cupertinoTextSelectionHandleControls,
-    TargetPlatform.android || TargetPlatform.fuchsia =>
+    TargetPlatform.android ||
+    TargetPlatform.fuchsia =>
       materialTextSelectionHandleControls,
-    TargetPlatform.linux || TargetPlatform.windows =>
+    TargetPlatform.linux ||
+    TargetPlatform.windows =>
       desktopTextSelectionHandleControls,
   };
 }

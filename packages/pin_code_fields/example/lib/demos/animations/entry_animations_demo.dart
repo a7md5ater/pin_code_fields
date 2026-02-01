@@ -64,7 +64,8 @@ class _EntryAnimationsDemoState extends State<EntryAnimationsDemo> {
             const SizedBox(height: 32),
 
             // Animation selector
-            const Text('Select Animation:', style: TextStyle(fontWeight: FontWeight.w500)),
+            const Text('Select Animation:',
+                style: TextStyle(fontWeight: FontWeight.w500)),
             const SizedBox(height: 16),
 
             ...MaterialPinAnimation.values.map((anim) {

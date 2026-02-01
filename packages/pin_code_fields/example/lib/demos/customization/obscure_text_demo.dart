@@ -40,7 +40,8 @@ class _ObscureTextDemoState extends State<ObscureTextDemo> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Try It', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Try It',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16),
                   MaterialPinField(
                     length: 4,
@@ -77,7 +78,8 @@ class _ObscureTextDemoState extends State<ObscureTextDemo> {
                       divisions: 8,
                       label: '${_blinkDuration.inMilliseconds}ms',
                       onChanged: (v) => setState(
-                        () => _blinkDuration = Duration(milliseconds: v.round()),
+                        () =>
+                            _blinkDuration = Duration(milliseconds: v.round()),
                       ),
                     ),
                   ],
@@ -88,7 +90,8 @@ class _ObscureTextDemoState extends State<ObscureTextDemo> {
           const SizedBox(height: 32),
 
           // Custom obscuring widget
-          const Text('Custom Obscuring Widget', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Custom Obscuring Widget',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           MaterialPinField(
             length: 4,
@@ -112,7 +115,8 @@ class _ObscureTextDemoState extends State<ObscureTextDemo> {
           const SizedBox(height: 32),
 
           // Different obscuring characters
-          const Text('Obscuring Characters', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Obscuring Characters',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           _ObscuringCharacterExample(
             character: '●',

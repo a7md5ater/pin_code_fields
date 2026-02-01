@@ -128,7 +128,7 @@ class TextGradientDemo extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.info_outline,
-                           size: 20, color: colorScheme.primary),
+                          size: 20, color: colorScheme.primary),
                       const SizedBox(width: 8),
                       Text(
                         'Note',

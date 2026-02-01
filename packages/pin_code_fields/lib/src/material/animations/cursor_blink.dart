@@ -13,9 +13,9 @@ class CursorBlink extends StatefulWidget {
     this.duration = const Duration(milliseconds: 500),
     this.child,
   }) : assert(
-         child != null || (color != null && width != null && height != null),
-         'Either child must be provided, or color, width, and height must all be provided',
-       );
+          child != null || (color != null && width != null && height != null),
+          'Either child must be provided, or color, width, and height must all be provided',
+        );
 
   /// The color of the cursor (used when [child] is null).
   final Color? color;

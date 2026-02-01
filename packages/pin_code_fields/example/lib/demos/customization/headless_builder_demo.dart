@@ -26,7 +26,8 @@ class HeadlessBuilderDemo extends StatelessWidget {
           const SizedBox(height: 32),
 
           // Example 1: Circular dots
-          const Text('Circular Dots', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Circular Dots',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           PinInput(
             length: 4,
@@ -84,7 +85,8 @@ class HeadlessBuilderDemo extends StatelessWidget {
           const SizedBox(height: 48),
 
           // Example 2: Squares with numbers
-          const Text('Visible Numbers', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Visible Numbers',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           PinInput(
             length: 6,
@@ -105,7 +107,8 @@ class HeadlessBuilderDemo extends StatelessWidget {
                       boxShadow: cell.isFocused
                           ? [
                               BoxShadow(
-                                color: colorScheme.primary.withValues(alpha: 0.3),
+                                color:
+                                    colorScheme.primary.withValues(alpha: 0.3),
                                 blurRadius: 8,
                                 spreadRadius: 2,
                               )
@@ -145,7 +148,8 @@ class HeadlessBuilderDemo extends StatelessWidget {
           const SizedBox(height: 48),
 
           // Example 3: Underline only
-          const Text('Minimalist Underline', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Minimalist Underline',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           PinInput(
             length: 5,

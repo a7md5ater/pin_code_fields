@@ -62,7 +62,8 @@ class _ControllerDemoState extends State<ControllerDemo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Current State', style: Theme.of(context).textTheme.titleSmall),
+                        Text('Current State',
+                            style: Theme.of(context).textTheme.titleSmall),
                         const SizedBox(height: 8),
                         _StateRow('text', '"${_pinController.text}"'),
                         _StateRow('hasError', '${_pinController.hasError}'),

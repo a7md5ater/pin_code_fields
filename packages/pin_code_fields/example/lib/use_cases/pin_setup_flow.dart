@@ -242,14 +242,12 @@ class _CreatePinPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Spacer(),
-
           Icon(
             Icons.pin_outlined,
             size: 64,
             color: colorScheme.primary,
           ),
           const SizedBox(height: 24),
-
           Text(
             'Create your PIN',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -257,7 +255,6 @@ class _CreatePinPage extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 8),
-
           Text(
             'Choose a 4-digit PIN to secure your account',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -266,7 +263,6 @@ class _CreatePinPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
-
           MaterialPinField(
             length: 4,
             pinController: controller,
@@ -283,7 +279,6 @@ class _CreatePinPage extends StatelessWidget {
             ),
             onCompleted: onComplete,
           ),
-
           const Spacer(flex: 2),
         ],
       ),
@@ -310,14 +305,12 @@ class _ConfirmPinPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Spacer(),
-
           Icon(
             Icons.lock_outline,
             size: 64,
             color: colorScheme.primary,
           ),
           const SizedBox(height: 24),
-
           Text(
             'Confirm your PIN',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -325,7 +318,6 @@ class _ConfirmPinPage extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 8),
-
           Text(
             'Re-enter your PIN to confirm',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -334,7 +326,6 @@ class _ConfirmPinPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
-
           MaterialPinField(
             length: 4,
             pinController: controller,
@@ -351,7 +342,6 @@ class _ConfirmPinPage extends StatelessWidget {
             errorText: 'PINs don\'t match. Try again.',
             onCompleted: onComplete,
           ),
-
           const Spacer(flex: 2),
         ],
       ),

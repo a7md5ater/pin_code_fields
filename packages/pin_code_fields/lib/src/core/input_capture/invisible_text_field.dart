@@ -108,27 +108,27 @@ class InvisibleTextField extends StatelessWidget {
         selectionColor: Colors.transparent,
         showCursor: false,
         showSelectionHandles: false,
-      enableInteractiveSelection: selectionEnabled,
-      selectionControls: selectionEnabled ? selectionControls : null,
-      contextMenuBuilder: selectionEnabled ? contextMenuBuilder : null,
-      // Input configuration
-      keyboardType: keyboardType,
-      inputFormatters: _buildInputFormatters(),
-      autofocus: false, // Handled externally
-      autocorrect: false,
-      enableSuggestions: false,
-      textCapitalization: textCapitalization,
-      textInputAction: textInputAction,
-      onSubmitted: onSubmitted,
-      onEditingComplete: onEditingComplete,
-      onSelectionChanged: onSelectionChanged,
-      keyboardAppearance: keyboardAppearance ?? Theme.of(context).brightness,
-      scrollPadding: scrollPadding,
-      textAlign: TextAlign.center,
-      maxLines: 1,
-      clipBehavior: Clip.none,
-      // Autofill support
-      autofillHints: autofillHints,
+        enableInteractiveSelection: selectionEnabled,
+        selectionControls: selectionEnabled ? selectionControls : null,
+        contextMenuBuilder: selectionEnabled ? contextMenuBuilder : null,
+        // Input configuration
+        keyboardType: keyboardType,
+        inputFormatters: _buildInputFormatters(),
+        autofocus: false, // Handled externally
+        autocorrect: false,
+        enableSuggestions: false,
+        textCapitalization: textCapitalization,
+        textInputAction: textInputAction,
+        onSubmitted: onSubmitted,
+        onEditingComplete: onEditingComplete,
+        onSelectionChanged: onSelectionChanged,
+        keyboardAppearance: keyboardAppearance ?? Theme.of(context).brightness,
+        scrollPadding: scrollPadding,
+        textAlign: TextAlign.center,
+        maxLines: 1,
+        clipBehavior: Clip.none,
+        // Autofill support
+        autofillHints: autofillHints,
       ),
     );
   }

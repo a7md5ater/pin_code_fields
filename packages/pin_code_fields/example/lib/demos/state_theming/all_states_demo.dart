@@ -32,7 +32,8 @@ class AllStatesDemo extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Try It', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Try It',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16),
                   MaterialPinField(
                     length: 6,
@@ -45,7 +46,8 @@ class AllStatesDemo extends StatelessWidget {
                       fillColor: Colors.transparent,
                       borderColor: colorScheme.outline,
                       // Focused state
-                      focusedFillColor: colorScheme.primaryContainer.withValues(alpha: 0.3),
+                      focusedFillColor:
+                          colorScheme.primaryContainer.withValues(alpha: 0.3),
                       focusedBorderColor: colorScheme.primary,
                       focusedBorderWidth: 2,
                       // Filled state
@@ -67,7 +69,8 @@ class AllStatesDemo extends StatelessWidget {
           const SizedBox(height: 32),
 
           // State legend
-          const Text('State Legend', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('State Legend',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
 
           _StateLegendItem(
@@ -131,7 +134,8 @@ class _StateLegendItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(title,
+                    style: const TextStyle(fontWeight: FontWeight.w600)),
                 Text(
                   description,
                   style: TextStyle(

@@ -94,7 +94,8 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
                   shape: _shape,
                   cellSize: Size(_cellWidth, _cellHeight),
                   spacing: _spacing,
-                  borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(_borderRadius)),
                   borderWidth: _borderWidth,
                   focusedBorderWidth: _focusedBorderWidth,
                   borderColor: _borderColor,

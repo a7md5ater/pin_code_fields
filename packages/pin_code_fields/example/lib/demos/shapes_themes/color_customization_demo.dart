@@ -70,7 +70,10 @@ class _ColorCustomizationDemoState extends State<ColorCustomizationDemo> {
           // Fill color picker
           _ColorPickerSection(
             title: 'Fill Color',
-            colors: [..._colors.map((c) => c.withValues(alpha: 0.1)), Colors.transparent],
+            colors: [
+              ..._colors.map((c) => c.withValues(alpha: 0.1)),
+              Colors.transparent
+            ],
             selectedColor: _fillColor,
             onColorSelected: (c) => setState(() => _fillColor = c),
           ),
@@ -79,7 +82,10 @@ class _ColorCustomizationDemoState extends State<ColorCustomizationDemo> {
           // Focused fill color picker
           _ColorPickerSection(
             title: 'Focused Fill Color',
-            colors: [..._colors.map((c) => c.withValues(alpha: 0.15)), Colors.transparent],
+            colors: [
+              ..._colors.map((c) => c.withValues(alpha: 0.15)),
+              Colors.transparent
+            ],
             selectedColor: _focusedFillColor,
             onColorSelected: (c) => setState(() => _focusedFillColor = c),
           ),

@@ -50,7 +50,8 @@ class _ErrorStateDemoState extends State<ErrorStateDemo> {
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
                 // Error state theming
                 errorColor: colorScheme.error,
-                errorFillColor: colorScheme.errorContainer.withValues(alpha: 0.3),
+                errorFillColor:
+                    colorScheme.errorContainer.withValues(alpha: 0.3),
                 errorBorderColor: colorScheme.error,
                 errorBorderWidth: 2,
                 errorTextStyle: TextStyle(
@@ -115,7 +116,8 @@ class _ErrorStateDemoState extends State<ErrorStateDemo> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Error Features', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text('Error Features',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 12),
                     _FeatureItem(
                       icon: Icons.vibration,
@@ -171,7 +173,8 @@ class _FeatureItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+                Text(title,
+                    style: const TextStyle(fontWeight: FontWeight.w500)),
                 Text(
                   description,
                   style: TextStyle(

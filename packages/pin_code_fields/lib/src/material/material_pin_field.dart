@@ -361,8 +361,8 @@ class _MaterialPinFieldState extends State<MaterialPinField>
   Widget build(BuildContext context) {
     final resolvedTheme = widget.theme.resolve(context);
     final hasError = effectiveController.hasError;
-    final showError = hasError &&
-        (widget.errorText != null || widget.errorBuilder != null);
+    final showError =
+        hasError && (widget.errorText != null || widget.errorBuilder != null);
 
     Widget pinInput = PinInput(
       length: widget.length,

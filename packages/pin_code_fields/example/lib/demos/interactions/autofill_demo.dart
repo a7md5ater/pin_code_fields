@@ -30,7 +30,8 @@ class AutofillDemo extends StatelessWidget {
           // OTP Autofill
           _AutofillSection(
             title: 'OTP / One-Time Code',
-            description: 'Best for SMS verification codes. iOS and Android will '
+            description:
+                'Best for SMS verification codes. iOS and Android will '
                 'suggest codes from recent SMS messages.',
             child: MaterialPinField(
               length: 6,
@@ -57,7 +58,8 @@ class AutofillDemo extends StatelessWidget {
           // Password/PIN Autofill
           _AutofillSection(
             title: 'Password / PIN',
-            description: 'For PIN codes that might be saved in password managers.',
+            description:
+                'For PIN codes that might be saved in password managers.',
             child: MaterialPinField(
               length: 4,
               obscureText: true,
@@ -77,7 +79,8 @@ class AutofillDemo extends StatelessWidget {
           // No Autofill
           _AutofillSection(
             title: 'Autofill Disabled',
-            description: 'For sensitive fields where autofill should be prevented.',
+            description:
+                'For sensitive fields where autofill should be prevented.',
             child: MaterialPinField(
               length: 4,
               enableAutofill: false,
@@ -103,7 +106,7 @@ class AutofillDemo extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.info_outline,
-                           size: 20, color: colorScheme.primary),
+                          size: 20, color: colorScheme.primary),
                       const SizedBox(width: 8),
                       Text(
                         'How it works',
@@ -118,19 +121,22 @@ class AutofillDemo extends StatelessWidget {
                   _InfoRow(
                     icon: Icons.phone_android,
                     title: 'iOS',
-                    description: 'Shows "From Messages" suggestion above keyboard',
+                    description:
+                        'Shows "From Messages" suggestion above keyboard',
                   ),
                   const SizedBox(height: 8),
                   _InfoRow(
                     icon: Icons.android,
                     title: 'Android',
-                    description: 'Uses SMS Retriever API for automatic code detection',
+                    description:
+                        'Uses SMS Retriever API for automatic code detection',
                   ),
                   const SizedBox(height: 8),
                   _InfoRow(
                     icon: Icons.password,
                     title: 'Password Managers',
-                    description: 'Can suggest saved PINs when using password hint',
+                    description:
+                        'Can suggest saved PINs when using password hint',
                   ),
                 ],
               ),
@@ -217,7 +223,8 @@ class _InfoRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        Icon(icon,
+            size: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
         const SizedBox(width: 8),
         Expanded(
           child: RichText(
