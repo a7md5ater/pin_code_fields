@@ -89,23 +89,25 @@ class InvisibleTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Use EditableText for core functionality with autofill support
-    return EditableText(
-      key: editableTextKey,
-      controller: controller,
-      focusNode: focusNode,
-      readOnly: readOnly,
-      // Completely invisible styling
-      style: const TextStyle(
-        color: Colors.transparent,
-        fontSize: 0.1,
-        height: 0,
-      ),
-      cursorColor: Colors.transparent,
-      backgroundCursorColor: Colors.transparent,
-      selectionColor: Colors.transparent,
-      showCursor: false,
-      showSelectionHandles: false,
-      rendererIgnoresPointer: true,
+    // Note: We use fontSize: 1 and Opacity instead of fontSize: 0.1
+    // because web browsers need a properly sized text field to handle input
+    return Opacity(
+      opacity: 0,
+      child: EditableText(
+        key: editableTextKey,
+        controller: controller,
+        focusNode: focusNode,
+        readOnly: readOnly,
+        // Invisible but properly sized for web compatibility
+        style: const TextStyle(
+          color: Colors.transparent,
+          fontSize: 1,
+        ),
+        cursorColor: Colors.transparent,
+        backgroundCursorColor: Colors.transparent,
+        selectionColor: Colors.transparent,
+        showCursor: false,
+        showSelectionHandles: false,
       enableInteractiveSelection: selectionEnabled,
       selectionControls: selectionEnabled ? selectionControls : null,
       contextMenuBuilder: selectionEnabled ? contextMenuBuilder : null,
@@ -127,6 +129,7 @@ class InvisibleTextField extends StatelessWidget {
       clipBehavior: Clip.none,
       // Autofill support
       autofillHints: autofillHints,
+      ),
     );
   }
 
