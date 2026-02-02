@@ -9,50 +9,16 @@ This directory contains migration resources to help you upgrade from v8.x to v9.
 | [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) | Complete migration guide with step-by-step instructions |
 | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Printable quick reference card for common changes |
 | [EXAMPLES.md](EXAMPLES.md) | Real-world before/after code examples |
-| [migrate.dart](migrate.dart) | Automated migration helper script |
 
 ## Quick Start
 
-### 1. Run the Migration Helper
+### 1. Read the Migration Guide
 
-**Option A: Download and run the script**
+Start with the [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) for a complete walkthrough of all changes.
 
-```bash
-# Download the migration script
-curl -O https://raw.githubusercontent.com/adar2378/pin_code_fields/master/packages/pin_code_fields/migration/9.0.0/migrate.dart
+### 2. Use IDE Find & Replace
 
-# Run on your lib/ directory (dry run - shows issues only)
-dart run migrate.dart lib/
-
-# Apply automatic fixes
-dart run migrate.dart lib/ --apply
-
-# Clean up
-rm migrate.dart
-```
-
-**Option B: Clone the repository**
-
-```bash
-# Clone the repo
-git clone https://github.com/adar2378/pin_code_fields.git --depth 1
-
-# Run the migration script
-dart run pin_code_fields/packages/pin_code_fields/migration/9.0.0/migrate.dart /path/to/your/project/lib/
-
-# Clean up
-rm -rf pin_code_fields
-```
-
-**Option C: Use IDE Find & Replace**
-
-See [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for regex patterns you can use in your IDE's find & replace.
-
-### 2. Review the Changes
-
-The script will:
-- **Auto-fix** simple renames (widget names, enum values, property names)
-- **Flag** changes requiring manual intervention (marked with ⚠️)
+See [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for regex patterns you can use in your IDE's find & replace for common renames.
 
 ### 3. Handle Manual Changes
 
