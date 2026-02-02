@@ -4,10 +4,6 @@ packages:
   - packages/pin_code_fields
   - packages/pin_code_fields/example
 
-command:
-  bootstrap:
-    usePubspecOverrides: true
-
 scripts:
   analyze:
     run: melos exec -- flutter analyze
