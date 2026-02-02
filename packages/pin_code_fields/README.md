@@ -250,15 +250,21 @@ PinCellData(
 )
 ```
 
-## Migration from v8.x
+## Migration from v8.x 🔄
 
-See [CHANGELOG.md](CHANGELOG.md) for detailed migration guide.
+Upgrading from v8.x? Here's a quick reference:
 
-**Quick changes:**
-- `PinCodeTextField` → `MaterialPinField`
-- `controller` + `focusNode` → `pinController: PinInputController()`
-- `pinTheme` → `theme: MaterialPinTheme()`
-- `errorAnimationController.add(ErrorAnimationType.shake)` → `pinController.triggerError()`
+| v8.x | v9.0.0 |
+|------|--------|
+| `PinCodeTextField` | `MaterialPinField` |
+| `appContext: context` | *(removed)* |
+| `controller` + `focusNode` | `pinController: PinInputController()` |
+| `pinTheme: PinTheme()` | `theme: MaterialPinTheme()` |
+| `PinCodeFieldShape.box` | `MaterialPinShape.outlined` |
+| `fieldWidth` + `fieldHeight` | `cellSize: Size(w, h)` |
+| `errorAnimationController.add(...)` | `controller.triggerError()` |
+
+📖 **Full migration guide**: [migration/9.0.0/MIGRATION_GUIDE.md](https://github.com/adar2378/pin_code_fields/blob/master/packages/pin_code_fields/migration/9.0.0/MIGRATION_GUIDE.md)
 
 ## Contributing
 
