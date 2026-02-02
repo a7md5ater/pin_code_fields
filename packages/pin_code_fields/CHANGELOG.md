@@ -1,6 +1,6 @@
 # Changelog
 
-## [9.0.0-dev.2] - Feature Enhancements
+## [9.0.0-dev.3] - Metadata & Accessibility
 
 ### Features ✨
 
@@ -9,6 +9,19 @@
   - Provides hints about remaining digits
   - Masks values when obscured for privacy
   - Exposes enabled/focused states
+
+### Documentation 📚
+
+- **README**: Updated with demo GIFs showcasing all features
+- **Screenshots**: Added static screenshots for pub.dev gallery
+- **Migration Guide**: Cleaned up migration resources (removed script references)
+
+---
+
+## [9.0.0-dev.2] - Feature Enhancements
+
+### Features ✨
+
 - **`cursorAlignment`**: Position custom cursor widgets within cells (e.g., underscore at bottom)
   ```dart
   MaterialPinTheme(

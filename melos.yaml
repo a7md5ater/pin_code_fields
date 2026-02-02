@@ -24,3 +24,7 @@ scripts:
   publish:dry-run:
     run: melos exec --scope="pin_code_fields" -- flutter pub publish --dry-run
     description: Dry run publish for pin_code_fields package
+
+  publish:
+    run: melos exec --scope="pin_code_fields" -- flutter pub publish
+    description: Publish pin_code_fields package to pub.dev
