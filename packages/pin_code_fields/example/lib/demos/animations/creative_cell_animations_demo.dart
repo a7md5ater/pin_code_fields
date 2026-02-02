@@ -50,7 +50,6 @@ class _CreativeCellAnimationsDemoState
           ),
           const SizedBox(height: 16),
           _BouncingFocusExample(controller: _controller1),
-
           const SizedBox(height: 48),
           _buildSectionHeader(
             context,
@@ -59,7 +58,6 @@ class _CreativeCellAnimationsDemoState
           ),
           const SizedBox(height: 16),
           _GlowWaveExample(controller: _controller2),
-
           const SizedBox(height: 48),
           _buildSectionHeader(
             context,
@@ -68,7 +66,6 @@ class _CreativeCellAnimationsDemoState
           ),
           const SizedBox(height: 16),
           _FlipEntryExample(controller: _controller3),
-
           const SizedBox(height: 48),
           _buildSectionHeader(
             context,
@@ -77,7 +74,6 @@ class _CreativeCellAnimationsDemoState
           ),
           const SizedBox(height: 16),
           _MorphingCellsExample(controller: _controller4),
-
           const SizedBox(height: 48),
         ],
       ),
@@ -394,7 +390,8 @@ class _GlowWaveCellState extends State<_GlowWaveCell>
             boxShadow: widget.cell.isFilled
                 ? [
                     BoxShadow(
-                      color: cellColor.withValues(alpha: 0.3 + 0.4 * glowIntensity),
+                      color: cellColor.withValues(
+                          alpha: 0.3 + 0.4 * glowIntensity),
                       blurRadius: 8 + 12 * glowIntensity,
                       spreadRadius: 1 + 3 * glowIntensity,
                     ),
@@ -532,9 +529,8 @@ class _FlipCellState extends State<_FlipCell>
                   colors: [Color(0xFF1E1E2E), Color(0xFF2D2D44)],
                 )
               : null,
-          color: widget.cell.isFilled
-              ? null
-              : colorScheme.surfaceContainerHighest,
+          color:
+              widget.cell.isFilled ? null : colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: widget.cell.isFocused

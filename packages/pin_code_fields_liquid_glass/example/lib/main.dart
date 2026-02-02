@@ -295,7 +295,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     alignment: Alignment.centerLeft,
                     child: IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.white),
                     ),
                   ),
 
@@ -432,15 +433,36 @@ class _LockScreenState extends State<LockScreen> {
   void _updateTime() {
     final now = DateTime.now();
     setState(() {
-      _timeString = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+      _timeString =
+          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
       _dateString = _formatDate(now);
     });
   }
 
   String _formatDate(DateTime date) {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const months = ['January', 'February', 'March', 'April', 'May', 'June',
-                   'July', 'August', 'September', 'October', 'November', 'December'];
+    const days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
     return '${days[date.weekday - 1]}, ${months[date.month - 1]} ${date.day}';
   }
 
@@ -980,7 +1002,8 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                     children: [
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                        icon: const Icon(Icons.arrow_back_ios,
+                            color: Colors.white),
                       ),
                       const Text(
                         'Playground',
@@ -1090,9 +1113,9 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                             ),
                           ],
                           selected: {_style},
-                          onSelectionChanged: (s) => setState(() => _style = s.first),
+                          onSelectionChanged: (s) =>
+                              setState(() => _style = s.first),
                         ),
-
                         const SizedBox(height: 16),
                         _SectionHeader('Common'),
                         _SliderControl(
@@ -1131,7 +1154,6 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           max: 96,
                           onChanged: (v) => setState(() => _cellHeight = v),
                         ),
-
                         SwitchListTile(
                           title: const Text('Obscure Text'),
                           value: _obscureText,
@@ -1142,7 +1164,6 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           value: _showCursor,
                           onChanged: (v) => setState(() => _showCursor = v),
                         ),
-
                         const SizedBox(height: 16),
                         _SectionHeader('Glass Settings'),
                         _SliderControl(
@@ -1157,7 +1178,8 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           value: _chromaticAberration,
                           min: 0,
                           max: 0.1,
-                          onChanged: (v) => setState(() => _chromaticAberration = v),
+                          onChanged: (v) =>
+                              setState(() => _chromaticAberration = v),
                         ),
                         _SliderControl(
                           label: 'Light Intensity',
@@ -1171,14 +1193,16 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           value: _ambientStrength,
                           min: 0,
                           max: 1,
-                          onChanged: (v) => setState(() => _ambientStrength = v),
+                          onChanged: (v) =>
+                              setState(() => _ambientStrength = v),
                         ),
                         _SliderControl(
                           label: 'Refractive Idx',
                           value: _refractiveIndex,
                           min: 1.0,
                           max: 2.0,
-                          onChanged: (v) => setState(() => _refractiveIndex = v),
+                          onChanged: (v) =>
+                              setState(() => _refractiveIndex = v),
                         ),
                         _SliderControl(
                           label: 'Saturation',
@@ -1187,7 +1211,6 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           max: 3,
                           onChanged: (v) => setState(() => _saturation = v),
                         ),
-
                         const SizedBox(height: 16),
                         _SectionHeader('Glow'),
                         SwitchListTile(
@@ -1202,7 +1225,6 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           max: 5,
                           onChanged: (v) => setState(() => _glowRadius = v),
                         ),
-
                         const SizedBox(height: 16),
                         _SectionHeader('Stretch Animation'),
                         SwitchListTile(
@@ -1215,7 +1237,8 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           value: _stretchInteractionScale,
                           min: 1.0,
                           max: 1.2,
-                          onChanged: (v) => setState(() => _stretchInteractionScale = v),
+                          onChanged: (v) =>
+                              setState(() => _stretchInteractionScale = v),
                         ),
                         _SliderControl(
                           label: 'Amount',
@@ -1229,11 +1252,10 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                           value: _stretchResistance,
                           min: 0,
                           max: 0.2,
-                          onChanged: (v) => setState(() => _stretchResistance = v),
+                          onChanged: (v) =>
+                              setState(() => _stretchResistance = v),
                         ),
-
                         const SizedBox(height: 16),
-
                         if (_style == GlassStyle.separate) ...[
                           _SectionHeader('Separate Style'),
                           _SliderControl(
@@ -1248,10 +1270,10 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                             value: _separateBorderRadius,
                             min: 0,
                             max: 32,
-                            onChanged: (v) => setState(() => _separateBorderRadius = v),
+                            onChanged: (v) =>
+                                setState(() => _separateBorderRadius = v),
                           ),
                         ],
-
                         if (_style == GlassStyle.unified) ...[
                           _SectionHeader('Unified Style'),
                           _SliderControl(
@@ -1266,10 +1288,10 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                             value: _containerBorderRadius,
                             min: 0,
                             max: 32,
-                            onChanged: (v) => setState(() => _containerBorderRadius = v),
+                            onChanged: (v) =>
+                                setState(() => _containerBorderRadius = v),
                           ),
                         ],
-
                         if (_style == GlassStyle.blended) ...[
                           _SectionHeader('Blended Style'),
                           _SliderControl(
@@ -1284,10 +1306,10 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
                             value: _blendedBorderRadius,
                             min: 0,
                             max: 32,
-                            onChanged: (v) => setState(() => _blendedBorderRadius = v),
+                            onChanged: (v) =>
+                                setState(() => _blendedBorderRadius = v),
                           ),
                         ],
-
                         const SizedBox(height: 32),
                       ],
                     ),

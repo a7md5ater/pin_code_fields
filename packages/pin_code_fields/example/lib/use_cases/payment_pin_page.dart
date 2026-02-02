@@ -124,10 +124,12 @@ class _PaymentPinPageState extends State<PaymentPinPage>
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF00D26A).withValues(alpha: 0.15),
+                            color:
+                                const Color(0xFF00D26A).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF00D26A).withValues(alpha: 0.3),
+                              color: const Color(0xFF00D26A)
+                                  .withValues(alpha: 0.3),
                             ),
                           ),
                           child: const Row(

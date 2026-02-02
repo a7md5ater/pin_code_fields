@@ -323,9 +323,7 @@ class _ColorCustomizationDemoState extends State<ColorCustomizationDemo>
             _StateIndicator('Complete', Colors.green, Colors.green.shade50),
           ],
         ),
-
         const SizedBox(height: 32),
-
         _SectionTitle('Error State'),
         const Text(
           'Tap "Trigger Error" to see error styling',
@@ -391,9 +389,7 @@ class _ColorCustomizationDemoState extends State<ColorCustomizationDemo>
             ),
           ],
         ),
-
         const SizedBox(height: 32),
-
         _SectionTitle('Disabled State'),
         const Text(
           'Read-only cells with muted styling',
@@ -438,7 +434,6 @@ class _ColorCustomizationDemoState extends State<ColorCustomizationDemo>
             ),
           ],
         ),
-
         const SizedBox(height: 32),
       ],
     );

@@ -209,169 +209,176 @@ class _OtpVerificationPageState extends State<OtpVerificationPage>
           children: [
             SafeArea(
               child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: Column(
-                children: [
-                  // App bar
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: const Icon(Icons.arrow_back_ios_new),
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.white.withValues(alpha: 0.2),
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
+                opacity: _fadeAnimation,
+                child: Column(
+                  children: [
+                    // App bar
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
                         children: [
-                          const SizedBox(height: 20),
-
-                          // Animated icon
-                          _PulsingIcon(),
-
-                          const SizedBox(height: 32),
-
-                          // Title
-                          const Text(
-                            'Verification Code',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-
-                          // Subtitle
-                          Text(
-                            'We sent a 6-digit code to\n+1 (555) ***-1234',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white.withValues(alpha: 0.8),
-                              height: 1.5,
-                            ),
-                          ),
-
-                          const SizedBox(height: 40),
-
-                          // Glassmorphism card with PIN field
-                          _GlassCard(
-                            child: Column(
-                              children: [
-                                MaterialPinField(
-                                  length: 6,
-                                  pinController: _pinController,
-                                  autoFocus: true,
-                                  enabled: !_isLoading,
-                                  theme: MaterialPinTheme(
-                                    shape: MaterialPinShape.outlined,
-                                    cellSize: const Size(46, 56),
-                                    spacing: 8,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(12),
-                                    ),
-                                    borderWidth: 1.5,
-                                    focusedBorderWidth: 2,
-                                    borderColor: Colors.grey.shade300,
-                                    focusedBorderColor: const Color(0xFF6366F1),
-                                    filledBorderColor: const Color(0xFF6366F1),
-                                    errorBorderColor: Colors.red.shade400,
-                                    textStyle: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF1F2937),
-                                    ),
-                                  ),
-                                  onClipboardFound: (code) {
-                                    setState(() => _clipboardCode = code);
-                                  },
-                                  onCompleted: _verifyOtp,
-                                ),
-
-                                // Paste button
-                                if (_clipboardCode != null) ...[
-                                  const SizedBox(height: 16),
-                                  FilledButton.icon(
-                                    onPressed: _pasteCode,
-                                    icon: const Icon(Icons.content_paste, size: 18),
-                                    label: Text('Paste $_clipboardCode'),
-                                    style: FilledButton.styleFrom(
-                                      backgroundColor: const Color(0xFF6366F1),
-                                    ),
-                                  ),
-                                ],
-
-                                const SizedBox(height: 24),
-
-                                // Resend section
-                                if (_resendSeconds > 0)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.timer_outlined,
-                                        size: 18,
-                                        color: Colors.grey.shade500,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'Resend code in ${_formatTime(_resendSeconds)}',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade600,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                else
-                                  TextButton.icon(
-                                    onPressed: _resendCode,
-                                    icon: const Icon(Icons.refresh),
-                                    label: const Text('Resend Code'),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: const Color(0xFF6366F1),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(height: 32),
-
-                          // Hint
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              '💡 Try: 123456',
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.9),
-                                fontSize: 13,
-                              ),
+                          IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: const Icon(Icons.arrow_back_ios_new),
+                            style: IconButton.styleFrom(
+                              backgroundColor:
+                                  Colors.white.withValues(alpha: 0.2),
+                              foregroundColor: Colors.white,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 20),
+
+                            // Animated icon
+                            _PulsingIcon(),
+
+                            const SizedBox(height: 32),
+
+                            // Title
+                            const Text(
+                              'Verification Code',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Subtitle
+                            Text(
+                              'We sent a 6-digit code to\n+1 (555) ***-1234',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white.withValues(alpha: 0.8),
+                                height: 1.5,
+                              ),
+                            ),
+
+                            const SizedBox(height: 40),
+
+                            // Glassmorphism card with PIN field
+                            _GlassCard(
+                              child: Column(
+                                children: [
+                                  MaterialPinField(
+                                    length: 6,
+                                    pinController: _pinController,
+                                    autoFocus: true,
+                                    enabled: !_isLoading,
+                                    theme: MaterialPinTheme(
+                                      shape: MaterialPinShape.outlined,
+                                      cellSize: const Size(46, 56),
+                                      spacing: 8,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(12),
+                                      ),
+                                      borderWidth: 1.5,
+                                      focusedBorderWidth: 2,
+                                      borderColor: Colors.grey.shade300,
+                                      focusedBorderColor:
+                                          const Color(0xFF6366F1),
+                                      filledBorderColor:
+                                          const Color(0xFF6366F1),
+                                      errorBorderColor: Colors.red.shade400,
+                                      textStyle: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF1F2937),
+                                      ),
+                                    ),
+                                    onClipboardFound: (code) {
+                                      setState(() => _clipboardCode = code);
+                                    },
+                                    onCompleted: _verifyOtp,
+                                  ),
+
+                                  // Paste button
+                                  if (_clipboardCode != null) ...[
+                                    const SizedBox(height: 16),
+                                    FilledButton.icon(
+                                      onPressed: _pasteCode,
+                                      icon: const Icon(Icons.content_paste,
+                                          size: 18),
+                                      label: Text('Paste $_clipboardCode'),
+                                      style: FilledButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFF6366F1),
+                                      ),
+                                    ),
+                                  ],
+
+                                  const SizedBox(height: 24),
+
+                                  // Resend section
+                                  if (_resendSeconds > 0)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.timer_outlined,
+                                          size: 18,
+                                          color: Colors.grey.shade500,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          'Resend code in ${_formatTime(_resendSeconds)}',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    TextButton.icon(
+                                      onPressed: _resendCode,
+                                      icon: const Icon(Icons.refresh),
+                                      label: const Text('Resend Code'),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor:
+                                            const Color(0xFF6366F1),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 32),
+
+                            // Hint
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                '💡 Try: 123456',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.9),
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -391,7 +398,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage>
                           height: 48,
                           child: CircularProgressIndicator(
                             strokeWidth: 3,
-                            valueColor: AlwaysStoppedAnimation(Color(0xFF6366F1)),
+                            valueColor:
+                                AlwaysStoppedAnimation(Color(0xFF6366F1)),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -461,7 +469,8 @@ class _PulsingIconState extends State<_PulsingIcon>
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.white.withValues(alpha: 0.3 + 0.2 * _controller.value),
+                color: Colors.white
+                    .withValues(alpha: 0.3 + 0.2 * _controller.value),
                 blurRadius: 30 + 20 * _controller.value,
                 spreadRadius: 5 + 5 * _controller.value,
               ),
