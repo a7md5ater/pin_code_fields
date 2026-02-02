@@ -2,11 +2,44 @@
   <img width="460" src="https://i.ibb.co/X5qxF7x/export-banner.png">
 </p>
 
-<a href="https://pub.dev/packages/pin_code_fields"><img src="https://img.shields.io/pub/v/pin_code_fields"></a>
+<p align="center">
+  <a href="https://pub.dev/packages/pin_code_fields"><img src="https://img.shields.io/pub/v/pin_code_fields"></a>
+  <a href="https://pub.dev/packages/pin_code_fields/score"><img src="https://img.shields.io/pub/likes/pin_code_fields"></a>
+  <a href="https://pub.dev/packages/pin_code_fields/score"><img src="https://img.shields.io/pub/points/pin_code_fields"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+</p>
 
-A highly customizable Flutter package for PIN code and OTP input fields with beautiful design and animations. Now with a **headless architecture** for complete customization freedom! 🎨
+A highly customizable Flutter package for PIN code and OTP input fields with beautiful design and animations. Now with a **headless architecture** for complete customization freedom!
 
-## Features 💚
+## Demos
+
+<table>
+  <tr>
+    <td align="center"><b>OTP Verification</b></td>
+    <td align="center"><b>Payment PIN</b></td>
+    <td align="center"><b>App Lock</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/adar2378/pin_code_fields/main/packages/pin_code_fields/screenshots/otp_verification.gif" width="250"/></td>
+    <td><img src="https://raw.githubusercontent.com/adar2378/pin_code_fields/main/packages/pin_code_fields/screenshots/payment.gif" width="250"/></td>
+    <td><img src="https://raw.githubusercontent.com/adar2378/pin_code_fields/main/packages/pin_code_fields/screenshots/lock_screen.gif" width="250"/></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center"><b>Creative Animations</b></td>
+    <td align="center"><b>Custom Cursors</b></td>
+    <td align="center"><b>Text Gradients</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/adar2378/pin_code_fields/main/packages/pin_code_fields/screenshots/creative_animations.gif" width="250"/></td>
+    <td><img src="https://raw.githubusercontent.com/adar2378/pin_code_fields/main/packages/pin_code_fields/screenshots/cursors.gif" width="250"/></td>
+    <td><img src="https://raw.githubusercontent.com/adar2378/pin_code_fields/main/packages/pin_code_fields/screenshots/gradient_texts.gif" width="250"/></td>
+  </tr>
+</table>
+
+## Features
 
 - **Headless Core**: Build completely custom PIN UIs with full control
 - **Material Design Ready**: Beautiful, ready-to-use Material Design implementation
@@ -264,7 +297,7 @@ Upgrading from v8.x? Here's a quick reference:
 | `fieldWidth` + `fieldHeight` | `cellSize: Size(w, h)` |
 | `errorAnimationController.add(...)` | `controller.triggerError()` |
 
-📖 **Full migration guide**: [migration/9.0.0/MIGRATION_GUIDE.md](https://github.com/adar2378/pin_code_fields/blob/master/packages/pin_code_fields/migration/9.0.0/MIGRATION_GUIDE.md)
+📖 **Full migration guide**: [migration/9.0.0/MIGRATION_GUIDE.md](https://github.com/adar2378/pin_code_fields/blob/main/packages/pin_code_fields/migration/9.0.0/MIGRATION_GUIDE.md)
 
 ## Contributing
 

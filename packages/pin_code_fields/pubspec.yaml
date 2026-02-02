@@ -13,12 +13,16 @@ topics:
   - input
 
 screenshots:
-  - description: 'Material PIN field with outlined style'
+  - description: 'OTP Verification - Outlined style with gradient background'
     path: screenshots/outlined.png
-  - description: 'Material PIN field with filled style'
+  - description: 'Payment Confirmation - Obscured PIN with dark theme'
     path: screenshots/filled.png
-  - description: 'Material PIN field with underlined style'
+  - description: 'Creative Animations - Multiple animation styles'
     path: screenshots/underlined.png
+  - description: 'Custom Cursors - Various cursor styles'
+    path: screenshots/cursors.png
+  - description: 'Text Gradients - Rainbow and gold gradients'
+    path: screenshots/gradient_texts.png
 
 platforms:
   android:
